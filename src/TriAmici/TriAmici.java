@@ -2,6 +2,8 @@
  * @author Assignment Group 9
  *
  */
+package TriAmici;
+
 public class TriAmici {
 
 	/**
