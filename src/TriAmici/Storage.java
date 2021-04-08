@@ -13,7 +13,7 @@ public class Storage {
 	private User[] users; // The user object array
 	private int numTickets; // Current number of Tickets
 	private Ticket[] tickets; // The Ticket object array
-	private String fileDir = "src/TriAmici/"; // location of the csv data files (e.g c:/users/...)
+	private String fileDir = "./"; // location of the csv data files (e.g c:/users/...)
 
 	public Storage() { // Main Constructor method
 		this.numUsers = 0;
