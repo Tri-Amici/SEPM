@@ -13,7 +13,7 @@ public class Storage {
 	private User[] users; // The user object array
 	private int numTickets; // Current number of Tickets
 	private Ticket[] tickets; // The Ticket object array
-	private String fileDir = "./"; // location of the csv data files (e.g c:/users/...)
+	private String fileDir = "src/TriAmici/"; // location of the csv data files (e.g c:/users/...)
 
 	public Storage() { // Main Constructor method
 		this.numUsers = 0;
@@ -73,7 +73,7 @@ public class Storage {
 	public void saveUserData() { // Save data to file
 		BufferedWriter outFile = null;
 		try {
-			outFile = new BufferedWriter(new FileWriter("./" + "UserData.csv"));
+			outFile = new BufferedWriter(new FileWriter(fileDir + "UserData.csv"));
 			for (int i = 0; i < numUsers; i++)
 				outFile.write(this.users[i].getName() + "," + this.users[i].getEmail() + "," + this.users[i].getPhone()
 						+ "," + this.users[i].getPassword() + "," + this.users[i].getLevel()
@@ -96,7 +96,7 @@ public class Storage {
 		BufferedReader inFile = null;
 		String[] tempInput;
 		try {
-			inFile = new BufferedReader(new FileReader("./" + "TicketData.csv"));
+			inFile = new BufferedReader(new FileReader(fileDir + "TicketData.csv"));
 			String currLine = inFile.readLine();
 			while (currLine != null && currLine.trim().length() > 0) { // A bit of input validation
 				tempInput = currLine.split(","); // Split line into array elements
@@ -140,7 +140,7 @@ public class Storage {
 	public void saveTicketData() { // Save data to file
 		BufferedWriter outFile = null;
 		try {
-			outFile = new BufferedWriter(new FileWriter("./" + "TicketData.csv"));
+			outFile = new BufferedWriter(new FileWriter(fileDir + "TicketData.csv"));
 			for (int i = 0; i < getNumTickets(); i++)
 				outFile.write(this.tickets[i].getName() + "," + this.tickets[i].getDescription() + ","
 						+ this.tickets[i].getAssignee() + "," + this.tickets[i].getSeverity() + ","
