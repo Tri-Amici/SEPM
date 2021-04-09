@@ -13,13 +13,19 @@ public class Storage {
 	private User[] users; // The user object array
 	private int numTickets; // Current number of Tickets
 	private Ticket[] tickets; // The Ticket object array
-	private String fileDir = "./"; // location of the csv data files (e.g c:/users/...)
+	/* NOTE: For the files to be located by Java when run on the command line,
+	 * the fileDir must be set to "./TriAmici/". When running in Eclipse, it
+	 * must be set to "./src/TriAmici/".
+	 */
+	private String fileDir = "./TriAmici/"; // location of the csv data files (e.g c:/users/...)
+	private final int maxUsers = 20;
+	private final int maxTickets = 20;
 
 	public Storage() { // Main Constructor method
 		this.numUsers = 0;
-		this.users = new User[20];
+		this.users = new User[maxUsers];
 		this.numTickets = 0;
-		this.tickets = new Ticket[20];
+		this.tickets = new Ticket[maxTickets];
 		this.loadUserData();				
 		this.loadTicketData();
 		this.saveUserData();
@@ -153,12 +159,6 @@ public class Storage {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) {
-		@SuppressWarnings("unused")
-		Storage test = new Storage();
-
 	}
 
 }

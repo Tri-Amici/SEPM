@@ -10,7 +10,11 @@ public class TriAmici {
 	 * Main application method
 	 */
 	public static void main(String[] args) {
-		// Mock input to validate project works
+		@SuppressWarnings("unused")
+		
+		Storage test = new Storage();
+		
+		
 		System.out.println("Working!");
 	}
 
