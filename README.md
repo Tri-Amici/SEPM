@@ -1,14 +1,18 @@
 # SEPM Assignment 2, Sprint 1
 
-### Instructions for compilation on myDesktop system:
+## Instructions for compilation on myDesktop system
 
-* Copy the project files onto myDesktop
-* Open the JDK command prompt and navigate to SEPM\src\TriAmici\
-* Compile the Java files using the following command:
+1. Copy the project files onto myDesktop
+2. Open the JDK command prompt and navigate to SEPM\src\TriAmici\
+3. Compile the Java files using the following command:
 
-	javac --release 8 TriAmici.java Storage.java User.java Ticket.java
-* Navigate back up one level with **cd ..**
-* Run the program using the following command:
+``` bash
+javac --release 8 *.java
+```
 
-    java TriAmici.TriAmici
+4. Navigate back up one level with **cd ..**
+5. Run the program using the following command:
 
+``` bash
+java TriAmici.TriAmici
+```
