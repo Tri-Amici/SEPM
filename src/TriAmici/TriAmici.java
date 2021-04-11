@@ -10,8 +10,6 @@ public class TriAmici {
 	 * Main application method
 	 */
 	public static void main(String[] args) {
-		@SuppressWarnings("unused")
-		
 		// Run in Eclipse default
 		boolean runInEclipse = false;
 		
@@ -23,7 +21,15 @@ public class TriAmici {
 		// Create a new instance of the Storage class
 		Storage test = new Storage(runInEclipse);
 		
-		System.out.println("Working!");
+		// Generate a sample menu
+		Menu menu = new Menu();
+		menu.addItem(new MenuItem(1, "Menu item A", (short)0));
+		menu.addItem(new MenuItem(2, "Menu item B", (short)0));
+		menu.addItem(new MenuItem(3, "Menu item C", (short)1));
+		menu.addItem(new MenuItem(4, "Menu item D", (short)2));
+		
+		// Display the menu
+		System.out.println(menu.buildMenu((short)1));
 	}
 
 }
