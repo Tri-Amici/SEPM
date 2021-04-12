@@ -10,9 +10,9 @@ public class User { // User class for creating User objects
 	private String email; // User's email variable
 	private String phone; // User's phone number variable
 	private String password; // User's password variable
-	private String level; // User's support level variable
+	private short level; // User's support level variable
 
-	public User(String name, String email, String phone, String password, String level) { // Constructor
+	public User(String name, String email, String phone, String password, short level) { // Constructor
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
@@ -29,22 +29,22 @@ public class User { // User class for creating User objects
 	}
 
 	public String getEmail() { // Returns the users' email
-		return email;
+		return this.email;
 	}
 
 	public String getPhone() { // Returns the users' phone number
-		return phone;
+		return this.phone;
 	}
 
 	public String getPassword() { // Returns the users' password
-		return password;
+		return this.password;
 	}
 
-	public String getLevel() { // Returns the users' support level
-		return level;
+	public short getLevel() { // Returns the users' support level
+		return this.level;
 	}
 
-	public void setLevel(String level) { // Sets the users support level
+	public void setLevel(short level) { // Sets the users support level
 		this.level = level;
 	}
 }
