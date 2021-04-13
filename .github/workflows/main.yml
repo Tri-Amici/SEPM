@@ -34,7 +34,7 @@ jobs:
 
       # Enter the source directory
       - name: Enter the source directory
-        run: cd src/TriAmici/ |
+        run: cd src/ |
              ls
 
       # Compile the java
