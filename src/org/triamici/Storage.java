@@ -22,7 +22,7 @@ public class Storage {
 		if (runInEclipse) {
 			fileDir = "./src/org/triamici/";
 		} else {
-			fileDir = "./triamici/";
+			fileDir = "./org/triamici/";
 		}
 		
 		this.users = new LinkedList<User>();
