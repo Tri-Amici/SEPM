@@ -38,5 +38,6 @@ jobs:
             cd src/TriAmici
             ls
             javac *.java
+            ls
             java TriAmici.TriAmici
         timeout-minutes: 1
