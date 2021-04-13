@@ -38,7 +38,7 @@ jobs:
 
       # Compile the java
       - name: Compile Java
-        run: javac --release 8 *.java
+        run: javac *.java
 
       # Run the application
       - name: Run application
