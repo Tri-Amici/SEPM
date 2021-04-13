@@ -30,6 +30,7 @@ jobs:
         uses: actions/setup-java@v2.0.0
         with: 
           java-version: 8
+          distribution: 'Adopt'
 
       # Enter the source directory
       - name: Enter the source directory
