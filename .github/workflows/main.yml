@@ -29,5 +29,5 @@ jobs:
             cd src/org/triamici
             javac *.java
             cd ../..
-            java TriAmici.TriAmici
+            java org.triamici.TriAmici -runInCI
         timeout-minutes: 1

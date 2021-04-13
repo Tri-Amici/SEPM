@@ -26,8 +26,10 @@ public class TriAmici {
 		for(int i = 0; i < args.length; i++)
 			if (args[0].contains("-runInEclipse"))
 				runInEclipse = true;
-			else if (args[0].contains("-runInCI"))
-				System.exit(0);
+			else if (args[0].contains("-runInCI")) {
+				System.out.println("Running in CI, quitting...");
+				System.exit(0);	
+			}
 		
 		// Create a new instance of the Storage class
 		storage = new Storage(runInEclipse);
