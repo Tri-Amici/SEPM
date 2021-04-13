@@ -33,7 +33,7 @@ public class TriAmici {
 		menu.addItem(new MenuItem(1, "Log in", (short)0));
 		menu.addItem(new MenuItem(2, "Register as new user", (short)0));
 		
-		// 
+		// Default selection
 		String selection = "";
 		
 		// Loop until we get valid input
