@@ -30,8 +30,11 @@ public class TriAmici {
 		
 		// Generate the log in menu
 		Menu menu = new Menu();
-		menu.addItem(new MenuItem(1, "Log in", (short)0));
-		menu.addItem(new MenuItem(2, "Register as new user", (short)0));
+		MenuItem menuLogin = new MenuItem(1, "Log in", (short)0);
+		MenuItem menuRegister = new MenuItem(2, "Register as new user", (short)0);
+		menu.addItem(menuLogin);
+		menu.addItem(menuRegister);
+		
 		
 		// Default selection
 		String selection = "";
@@ -58,16 +61,14 @@ public class TriAmici {
 						
 						//Search for the user in the database by email
 						for(User user: test.getUsers() ) {
-							if(email.equalsIgnoreCase(user.getEmail()) )
+							if(email.equalsIgnoreCase(user.getEmail()) ) 
 								currentUser = user;	
 							
-								
-							
 						}
+						//If the user couldn't be found, start again 
 						if(currentUser == null)
 							System.out.println("User not found! Please try " +
 									"again or register a new user.");
-						
 						
 						else {
 							//Prompt for the password
@@ -76,6 +77,7 @@ public class TriAmici {
 							//Check that the password matches.
 							if(password.equals(currentUser.getPassword())) {
 								
+								//If it matches, set the user to be logged in
 								System.out.println("Successfully logged in user " +
 								currentUser.getName() + ".");
 								loggedInUser = currentUser;
@@ -89,8 +91,6 @@ public class TriAmici {
 						
 					}
 							
-				
-			
 					break;
 				case "2":
 					// Get the user's email
@@ -170,7 +170,21 @@ public class TriAmici {
 		
 		// Close user input
 		userInput.close();
-		//Generate the menu here with the logged-in user's access level.
+		
+		//Remove the old items from the menu now that the login process is complete
+		menu.removeItem(menuLogin);
+		menu.removeItem(menuRegister);
+		
+		//Generate a new menu here to test access levels
+		menu.addItem(new MenuItem(1,"This is a level zero item", (short)0));
+		menu.addItem(new MenuItem(2,"This is a level one item", (short)1));
+		menu.addItem(new MenuItem(3,"This is a level two item", (short)2));
+		System.out.println(menu.buildMenu(loggedInUser.getLevel()));
+		
+		
+		
+		
+
 		
 	}
 }
