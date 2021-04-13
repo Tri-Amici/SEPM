@@ -32,17 +32,11 @@ jobs:
           java-version: 8
           distribution: 'adopt'
 
-      # Enter the source directory
-      - name: Enter the source directory
-        run: cd src/ |
-             ls
-
-      # Compile the java
-      - name: Compile Java
-        run: javac *.java
-        timeout-minutes: 1
-
-      # Run the application
-      - name: Run application
-        run: java TriAmici.TriAmici
+      # Build and run the application
+      - name: Build and run the application
+        run: |
+            cd src/TriAmici
+            ls
+            javac *.java
+            java TriAmici.TriAmici
         timeout-minutes: 1
