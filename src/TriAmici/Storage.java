@@ -7,17 +7,16 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.LinkedList;
 
 public class Storage {
-	private int numUsers; // Current number of Users
-	private User[] users; // The user object array
+	private LinkedList<User> users; // The user object array
 	private int numTickets; // Current number of Tickets
-	private Ticket[] tickets; // The Ticket object array
+	private LinkedList<Ticket> tickets; // The Ticket object array
 	private String fileDir; // location of the csv data files (e.g c:/users/...)
-	private final int maxUsers = 20;
-	private final int maxTickets = 20;
 	
-	public Storage(boolean runInEclipse) { // Main Constructor method
+	public Storage(boolean runInEclipse) throws IOException { // Main Constructor method
 		// Set the location of the CSV files (different for Eclipse)
 		if (runInEclipse) {
 			fileDir = "./src/TriAmici/";
@@ -25,16 +24,19 @@ public class Storage {
 			fileDir = "./TriAmici/";
 		}
 		
-		this.numUsers = 0;
-		this.users = new User[maxUsers];
+		this.users = new LinkedList<User>();
 		this.numTickets = 0;
-		this.tickets = new Ticket[maxTickets];
+		this.tickets = new LinkedList<Ticket>();
 		this.loadUserData();				
 		this.loadTicketData();
 		this.saveUserData();
 		this.saveTicketData();
 	}
 
+	public LinkedList<User> getUsers() {
+		return users;
+	}
+	
 	/**
 	 * Load the User data from the csv file
 	 */
@@ -46,9 +48,8 @@ public class Storage {
 			String currLine = inFile.readLine();
 			while (currLine != null && currLine.trim().length() > 0) { // A bit of input validation
 				tempInput = currLine.split(","); // Split line into array elements
-				this.addUser(tempInput[0], tempInput[1], tempInput[2], tempInput[3], tempInput[4]);
+				this.addUser(new User(tempInput[0], tempInput[1], tempInput[2], tempInput[3], Short.parseShort(tempInput[4])));
 				currLine = inFile.readLine();
-				numUsers++;
 			}
 			inFile.close();
 		} catch (Exception e) {
@@ -59,43 +60,31 @@ public class Storage {
 	/**
 	 * Add a user to user object array
 	 */
-	public void addUser(String name, String email, String phone, String password, String level) {
-		this.users[numUsers] = new User(name, email, phone, password, level);
-//		System.out.print(this.users[numUsers].getName());
-//		System.out.print(this.users[numUsers].getEmail());
-//		System.out.print(this.users[numUsers].getPhone());
-//		System.out.print(this.users[numUsers].getPassword());
-//		System.out.print(this.users[numUsers].getLevel());
-//		System.out.println();
+	public void addUser(User user) {
+		this.users.add(user);
 	}
 	
 	/**
 	 * Return the current number of users in the system
 	 */
 	 public int getNumUsers() {
-		 return numUsers;
+		 return users.size();
 	 }
 
 	 /**
 	  * Save the user data to the csv file
+	 * @throws IOException 
 	  */	 
-	public void saveUserData() { // Save data to file
+	public void saveUserData() throws IOException { // Save data to file
 		BufferedWriter outFile = null;
-		try {
-			outFile = new BufferedWriter(new FileWriter(fileDir + "UserData.csv"));
-			for (int i = 0; i < numUsers; i++)
-				outFile.write(this.users[i].getName() + "," + this.users[i].getEmail() + "," + this.users[i].getPhone()
-						+ "," + this.users[i].getPassword() + "," + this.users[i].getLevel()
-						+ System.getProperty("line.separator"));
-			outFile.flush();
-			outFile.close();
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-
-		}
-
+		
+		outFile = new BufferedWriter(new FileWriter(fileDir + "UserData.csv"));
+		for (User user : this.users)
+			outFile.write(user.getName() + "," + user.getEmail() + "," + user.getPhone()
+					+ "," + user.getPassword() + "," + user.getLevel()
+					+ System.getProperty("line.separator"));
+		outFile.flush();
+		outFile.close();
 	}
 
 	/**
@@ -125,15 +114,7 @@ public class Storage {
 	 */
 	public void addTicket(String name, String description, String assignee, int severity, String status,
 			boolean resolved, String time) {
-		this.tickets[numTickets] = new Ticket(name, description, assignee, severity, status, resolved, time);
-//		System.out.print(this.tickets[numTickets].getName());
-//		System.out.print(this.tickets[numTickets].getDescription());
-//		System.out.print(this.tickets[numTickets].getAssignee());
-//		System.out.print(this.tickets[numTickets].getSeverity());
-//		System.out.print(this.tickets[numTickets].getStatus());
-//		System.out.print(this.tickets[numTickets].getResolved());
-//		System.out.print(this.tickets[numTickets].getTime());
-//		System.out.println();
+		tickets.add(new Ticket(name, description, assignee, severity, status, resolved, time));
 	}
 	
 	/**
@@ -150,11 +131,11 @@ public class Storage {
 		BufferedWriter outFile = null;
 		try {
 			outFile = new BufferedWriter(new FileWriter(fileDir + "TicketData.csv"));
-			for (int i = 0; i < getNumTickets(); i++)
-				outFile.write(this.tickets[i].getName() + "," + this.tickets[i].getDescription() + ","
-						+ this.tickets[i].getAssignee() + "," + this.tickets[i].getSeverity() + ","
-						+ this.tickets[i].getStatus() + "," + this.tickets[i].getResolved() + ","
-						+ this.tickets[i].getTime() + System.getProperty("line.separator"));
+			for (Ticket ticket: this.tickets)
+				outFile.write(ticket.getName() + "," + ticket.getDescription() + ","
+						+ ticket.getAssignee() + "," + ticket.getSeverity() + ","
+						+ ticket.getStatus() + "," + ticket.getResolved() + ","
+						+ ticket.getTime() + System.getProperty("line.separator"));
 			outFile.flush();
 			outFile.close();
 
