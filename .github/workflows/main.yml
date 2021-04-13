@@ -28,6 +28,8 @@ jobs:
       # Install Java
       - name: Setup Java JDK
         uses: actions/setup-java@v2.0.0
+        with: 
+          java-version: 8
 
       # Enter the source directory
       - name: Enter the source directory
