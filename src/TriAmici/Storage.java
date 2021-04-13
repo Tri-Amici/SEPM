@@ -13,10 +13,8 @@ import java.util.LinkedList;
 public class Storage {
 	private LinkedList<User> users; // The user object array
 	private int numTickets; // Current number of Tickets
-	private Ticket[] tickets; // The Ticket object array
+	private LinkedList<Ticket> tickets; // The Ticket object array
 	private String fileDir; // location of the csv data files (e.g c:/users/...)
-	private final int maxUsers = 20;
-	private final int maxTickets = 20;
 	
 	public Storage(boolean runInEclipse) throws IOException { // Main Constructor method
 		// Set the location of the CSV files (different for Eclipse)
@@ -28,7 +26,7 @@ public class Storage {
 		
 		this.users = new LinkedList<User>();
 		this.numTickets = 0;
-		this.tickets = new Ticket[maxTickets];
+		this.tickets = new LinkedList<Ticket>();
 		this.loadUserData();				
 		this.loadTicketData();
 		this.saveUserData();
@@ -116,7 +114,7 @@ public class Storage {
 	 */
 	public void addTicket(String name, String description, String assignee, int severity, String status,
 			boolean resolved, String time) {
-		this.tickets[numTickets] = new Ticket(name, description, assignee, severity, status, resolved, time);
+		tickets.add(new Ticket(name, description, assignee, severity, status, resolved, time));
 	}
 	
 	/**
@@ -133,11 +131,11 @@ public class Storage {
 		BufferedWriter outFile = null;
 		try {
 			outFile = new BufferedWriter(new FileWriter(fileDir + "TicketData.csv"));
-			for (int i = 0; i < getNumTickets(); i++)
-				outFile.write(this.tickets[i].getName() + "," + this.tickets[i].getDescription() + ","
-						+ this.tickets[i].getAssignee() + "," + this.tickets[i].getSeverity() + ","
-						+ this.tickets[i].getStatus() + "," + this.tickets[i].getResolved() + ","
-						+ this.tickets[i].getTime() + System.getProperty("line.separator"));
+			for (Ticket ticket: this.tickets)
+				outFile.write(ticket.getName() + "," + ticket.getDescription() + ","
+						+ ticket.getAssignee() + "," + ticket.getSeverity() + ","
+						+ ticket.getStatus() + "," + ticket.getResolved() + ","
+						+ ticket.getTime() + System.getProperty("line.separator"));
 			outFile.flush();
 			outFile.close();
 

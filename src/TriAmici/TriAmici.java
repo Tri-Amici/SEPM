@@ -101,7 +101,10 @@ public class TriAmici {
 					
 					while (password.length() == 0) {
 						System.out.println("Enter your password");
-						System.out.println("(at least one uppercase, lowercase and number, no special characters)");
+						System.out.println("- At least one uppercase\n"
+								+ "- Lowercase and number\n"
+								+ "- No special characters\n"
+								+ "- 8 characters in length)");
 						password = userInput.nextLine().trim();
 						
 						// Validate the password and set to blank if not valid
