@@ -36,8 +36,6 @@ jobs:
       - name: Build and run the application
         run: |
             cd src/TriAmici
-            ls
             javac *.java
-            ls
             java TriAmici.TriAmici
         timeout-minutes: 1
