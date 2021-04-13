@@ -43,14 +43,58 @@ public class TriAmici {
 			
 			// Grab the user's input
 			selection = userInput.nextLine();
+			//Moved these declarations up here for use with the login system
+			String email = "";
+			String password = "";
+			User currentUser = null;
 			
 			switch (selection) {
 				case "1":
-					System.out.println("Not yet commissioned");
+					
+					while(loggedInUser == null)  {
+						// Prompt for the email from the user
+						System.out.println("Enter your email address to log in");
+						email = userInput.nextLine().trim();
+						
+						//Search for the user in the database by email
+						for(User user: test.getUsers() ) {
+							if(email.equalsIgnoreCase(user.getEmail()) )
+								currentUser = user;	
+							
+								
+							
+						}
+						if(currentUser == null)
+							System.out.println("User not found! Please try " +
+									"again or register a new user.");
+						
+						
+						else {
+							//Prompt for the password
+							System.out.println("Enter your password.");
+							password = userInput.nextLine().trim();
+							//Check that the password matches.
+							if(password.equals(currentUser.getPassword())) {
+								
+								System.out.println("Successfully logged in user " +
+								currentUser.getName() + ".");
+								loggedInUser = currentUser;
+								break;
+							}
+							else
+								System.out.println("Password doesn't match!" +
+							" Please try again or reset your password.");
+							
+							}	
+						
+					}
+							
+				
+			
 					break;
 				case "2":
 					// Get the user's email
-					String email = "";
+					
 					
 					while (email.length() == 0) {
 						System.out.println("Enter your email address");
@@ -97,14 +141,14 @@ public class TriAmici {
 					}
 					
 					// Get the user's password
-					String password = "";
+					
 					
 					while (password.length() == 0) {
 						System.out.println("Enter your password");
 						System.out.println("- At least one uppercase\n"
 								+ "- Lowercase and number\n"
 								+ "- No special characters\n"
-								+ "- 8 characters in length)");
+								+ "- 8 characters in length");
 						password = userInput.nextLine().trim();
 						
 						// Validate the password and set to blank if not valid
@@ -126,5 +170,7 @@ public class TriAmici {
 		
 		// Close user input
 		userInput.close();
+		//Generate the menu here with the logged-in user's access level.
+		
 	}
 }
