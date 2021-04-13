@@ -1,4 +1,4 @@
-package TriAmici;
+package org.triamici;
 
 /**
  * @author Assignment Group 9
