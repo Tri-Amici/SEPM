@@ -39,7 +39,9 @@ jobs:
       # Compile the java
       - name: Compile Java
         run: javac *.java
+        timeout-minutes: 1
 
       # Run the application
       - name: Run application
         run: java TriAmici.TriAmici
+        timeout-minutes: 1
