@@ -176,9 +176,13 @@ public class TriAmici {
 		menu.removeItem(menuRegister);
 		
 		//Generate a new menu here to test access levels
-		menu.addItem(new MenuItem(1,"This is a level zero item", (short)0));
-		menu.addItem(new MenuItem(2,"This is a level one item", (short)1));
-		menu.addItem(new MenuItem(3,"This is a level two item", (short)2));
+		MenuItem testItem1 = new MenuItem(1,"This is a level zero item", (short)0);
+		MenuItem testItem2 = new MenuItem(2,"This is a level one item", (short)1);
+		MenuItem testItem3 = new MenuItem(3,"This is a level two item", (short)2);
+		
+		menu.addItem(testItem1);
+		menu.addItem(testItem2);
+		menu.addItem(testItem3);
 		System.out.println(menu.buildMenu(loggedInUser.getLevel()));
 		
 		
