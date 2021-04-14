@@ -1,7 +1,7 @@
 package Tests;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import TriAmici.Validation;
+import org.triamici.Validation;
 
 class ValidationTests {
 

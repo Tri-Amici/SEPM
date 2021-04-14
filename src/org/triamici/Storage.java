@@ -1,4 +1,4 @@
-package TriAmici;
+package org.triamici;
 /**
  * @author Assignment Group 9
  *
@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Storage {
 	private LinkedList<User> users; // The user object array
@@ -19,39 +20,36 @@ public class Storage {
 	public Storage(boolean runInEclipse) throws IOException { // Main Constructor method
 		// Set the location of the CSV files (different for Eclipse)
 		if (runInEclipse) {
-			fileDir = "./src/TriAmici/";
+			fileDir = "./src/org/triamici/";
 		} else {
-			fileDir = "./TriAmici/";
+			fileDir = "./org/triamici/";
 		}
 		
-		this.users = new LinkedList<User>();
-		this.numTickets = 0;
-		this.tickets = new LinkedList<Ticket>();
+		this.users = new LinkedList<>();
+		this.tickets = new LinkedList<>();
 		this.loadUserData();				
 		this.loadTicketData();
 		this.saveUserData();
 		this.saveTicketData();
 	}
 
-	public LinkedList<User> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
 	
 	/**
 	 * Load the User data from the csv file
+	 * @throws IOException 
 	 */
-	public void loadUserData() { // Load data from file
-		BufferedReader inFile = null;
+	public void loadUserData() throws IOException { // Load data from file
 		String[] tempInput;
-		try {
-			inFile = new BufferedReader(new FileReader(fileDir + "UserData.csv"));
+		try (BufferedReader inFile = new BufferedReader(new FileReader(fileDir + "UserData.csv"))) {
 			String currLine = inFile.readLine();
 			while (currLine != null && currLine.trim().length() > 0) { // A bit of input validation
 				tempInput = currLine.split(","); // Split line into array elements
 				this.addUser(new User(tempInput[0], tempInput[1], tempInput[2], tempInput[3], Short.parseShort(tempInput[4])));
 				currLine = inFile.readLine();
 			}
-			inFile.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -76,25 +74,24 @@ public class Storage {
 	 * @throws IOException 
 	  */	 
 	public void saveUserData() throws IOException { // Save data to file
-		BufferedWriter outFile = null;
-		
-		outFile = new BufferedWriter(new FileWriter(fileDir + "UserData.csv"));
-		for (User user : this.users)
-			outFile.write(user.getName() + "," + user.getEmail() + "," + user.getPhone()
-					+ "," + user.getPassword() + "," + user.getLevel()
-					+ System.getProperty("line.separator"));
-		outFile.flush();
-		outFile.close();
+		try (BufferedWriter outFile = new BufferedWriter(new FileWriter(fileDir + "UserData.csv")))
+		{
+			for (User user : this.users)
+				outFile.write(user.getName() + "," + user.getEmail() + "," + user.getPhone()
+						+ "," + user.getPassword() + "," + user.getLevel()
+						+ System.getProperty("line.separator"));
+			outFile.flush();
+		}
 	}
 
 	/**
 	 * Load the Ticket data from the csv file and add it to an ticket object array
+	 * @throws IOException 
+	 * @throws  
 	 */
-	public void loadTicketData() { // Load ticket data from file
-		BufferedReader inFile = null;
+	public void loadTicketData() throws IOException { // Load ticket data from file
 		String[] tempInput;
-		try {
-			inFile = new BufferedReader(new FileReader(fileDir + "TicketData.csv"));
+		try (BufferedReader inFile = new BufferedReader(new FileReader(fileDir + "TicketData.csv"))) {
 			String currLine = inFile.readLine();
 			while (currLine != null && currLine.trim().length() > 0) { // A bit of input validation
 				tempInput = currLine.split(","); // Split line into array elements
@@ -103,9 +100,6 @@ public class Storage {
 				currLine = inFile.readLine();
 				numTickets++;
 			}
-			inFile.close();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -126,21 +120,18 @@ public class Storage {
 
 	 /**
 	  * Save the ticket data to the csv file
+	 * @throws IOException 
 	  */	
-	public void saveTicketData() { // Save data to file
-		BufferedWriter outFile = null;
-		try {
-			outFile = new BufferedWriter(new FileWriter(fileDir + "TicketData.csv"));
+	public void saveTicketData() throws IOException { // Save data to file
+		try (BufferedWriter outFile = new BufferedWriter(new FileWriter(fileDir + "TicketData.csv"))) {
 			for (Ticket ticket: this.tickets)
 				outFile.write(ticket.getName() + "," + ticket.getDescription() + ","
 						+ ticket.getAssignee() + "," + ticket.getSeverity() + ","
 						+ ticket.getStatus() + "," + ticket.getResolved() + ","
 						+ ticket.getTime() + System.getProperty("line.separator"));
 			outFile.flush();
-			outFile.close();
-
 		} catch (Exception e) {
-			// TODO: handle exception
+			// Print the exception
 			e.printStackTrace();
 		}
 	}

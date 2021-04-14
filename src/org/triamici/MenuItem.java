@@ -1,4 +1,4 @@
-package TriAmici;
+package org.triamici;
 
 public class MenuItem implements Comparable<MenuItem> {
 
@@ -7,7 +7,6 @@ public class MenuItem implements Comparable<MenuItem> {
 	private short accessLevel = 0;
 	
 	public MenuItem() {
-		
 	}
 	
 	public MenuItem(int itemNumber, String menuText, short accessLevel) {
@@ -63,4 +62,13 @@ public class MenuItem implements Comparable<MenuItem> {
 		return this.itemNumber - item.getItemNumber();
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return this.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.itemNumber;
+	}
 }

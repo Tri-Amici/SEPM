@@ -1,10 +1,16 @@
-package TriAmici;
+package org.triamici;
 /**
  * @author Assignment Group 9
  *
  */
 public class Validation {
 
+	/**
+	 * Constructor
+	 */
+	Validation() {
+	}
+	
 	/**
 	 * Validate length
 	 */

@@ -1,4 +1,4 @@
-package TriAmici;
+package org.triamici;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -7,7 +7,7 @@ import java.util.List;
 public class Menu {
 
 	// Constant divider
-	final String divider = "-------------------------";
+	static final String DIVIDER = "-------------------------";
 	
 	// List of menu items
 	List<MenuItem> menuItems;
@@ -37,7 +37,8 @@ public class Menu {
 	public String buildMenu(short accessLevel) {
 		
 		// Start the menu with a divider
-		String returnValue = divider + '\n';
+		StringBuilder returnValue = new StringBuilder(DIVIDER);
+		returnValue.append('\n');
 		
 		// Sort the menu items
 		Collections.sort(menuItems);
@@ -45,15 +46,19 @@ public class Menu {
 		// List the menu items
 		for(MenuItem menuItem : this.menuItems) {
 			// Add the menu item if the access level is greater than or equal to the menu item menu level
-			if (accessLevel >= menuItem.getAccessLevel())
-				returnValue += menuItem.getItemNumber() + ". " + menuItem.getMenuText() + '\n';
+			if (accessLevel >= menuItem.getAccessLevel()) {
+				returnValue.append(menuItem.getItemNumber());
+				returnValue.append(". ");
+				returnValue.append(menuItem.getMenuText());
+				returnValue.append('\n');
+			}
 		}
 		
 		// End with a divider
-		returnValue += divider;
+		returnValue.append(DIVIDER);
 		
 		// Return the menu
-		return returnValue;
+		return returnValue.toString();
 	}
 	
 }

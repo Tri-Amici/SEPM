@@ -3,16 +3,16 @@
 ## Instructions for compilation on myDesktop system
 
 1. Copy the project files onto myDesktop
-2. Open the JDK command prompt and navigate to SEPM\src\TriAmici\
+2. Open the OpenJDK command prompt and navigate to [copied file path here]\src\org\triamici\
 3. Compile the Java files using the following command:
 
 ``` bash
 javac --release 8 *.java
 ```
 
-4. Navigate back up one level with **cd ..**
+4. Navigate back up two levels with **cd ..**
 5. Run the program using the following command:
 
 ``` bash
-java TriAmici.TriAmici
+java org.triamici.TriAmici
 ```
