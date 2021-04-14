@@ -25,9 +25,8 @@ public class Storage {
 			fileDir = "./org/triamici/";
 		}
 		
-		this.users = new LinkedList<User>();
-		this.numTickets = 0;
-		this.tickets = new LinkedList<Ticket>();
+		this.users = new LinkedList<>();
+		this.tickets = new LinkedList<>();
 		this.loadUserData();				
 		this.loadTicketData();
 		this.saveUserData();

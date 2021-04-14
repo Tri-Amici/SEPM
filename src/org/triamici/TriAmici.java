@@ -20,6 +20,7 @@ public class TriAmici {
 	public static void main(String[] args) throws IOException {
 		// Run in Eclipse default
 		boolean runInEclipse = false;
+		boolean runningInCI = false;
 		userInput = new Scanner( System.in );
 		
 		// Check if we're running in Eclipse
@@ -27,26 +28,33 @@ public class TriAmici {
 			if (args[0].contains("-runInEclipse"))
 				runInEclipse = true;
 			else if (args[0].contains("-runInCI")) {
-				System.out.println("Running in CI, quitting...");
-				//System.exit(0);	
+				System.out.println("CI: running smoke test and quitting...");	
+				runningInCI = true;
 			}
 		
 		// Create a new instance of the Storage class
 		storage = new Storage(runInEclipse);
 		
-		// Generate the log in menu
-		Menu menu = new Menu();
-		menu.addItem(new MenuItem(1, "Log in", (short)0));
-		menu.addItem(new MenuItem(2, "Register as new user", (short)0));
+		// Quit if we're running in CI
+		if (runningInCI) {
+			System.exit(0);
+		}
 		
 		// Display the menu
-		userMenu(menu.buildMenu((short)0));
+		userMenu();
 		
 		// Close user input
 		userInput.close();
 	}
 	
-	private static void userMenu(String menuText) throws IOException {
+	private static void userMenu() throws IOException {
+		// Generate the log in menu
+		Menu menu = new Menu();
+		menu.addItem(new MenuItem(1, "Log in", (short)0));
+		menu.addItem(new MenuItem(2, "Register as new user", (short)0));
+		
+		String menuText = menu.buildMenu((short)0);
+		
 		// Default selection
 		String selection = "";
 		
