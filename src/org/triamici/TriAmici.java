@@ -12,6 +12,7 @@ public class TriAmici {
 	static User loggedInUser;
 	static Storage storage;
 	static Scanner userInput;
+	static final String NOT_DONE = "Not yet commissioned...";
 	
 	/**
 	 * Main application method
@@ -40,11 +41,11 @@ public class TriAmici {
 			System.exit(0);
 		}
 		
-		// Display the menu
+		// Display the user login/signup menu
 		userMenu();
 		
-		// New functionality goes here
-		System.out.println("\n\nOur next menu goes here...");
+		// Display the ticket menu
+		ticketMenu();
 		
 		// Close user input
 		userInput.close();
@@ -95,6 +96,68 @@ public class TriAmici {
 					break;
 				default:
 					selection = "";
+			}
+		}
+	}
+	
+	private static void ticketMenu() {
+		// Exit app boolean
+		boolean exitApp = false;
+		
+		// Generate the log in menu
+		Menu menu = new Menu();
+		menu.addItem(new MenuItem(1, "Log a ticket", (short)0));
+		menu.addItem(new MenuItem(2, "View Submitted Open Tickets", (short)0));
+		menu.addItem(new MenuItem(3, "View Assigned Open Tickets", (short)1));
+		menu.addItem(new MenuItem(4, "Change Ticket Severity", (short)1));
+		menu.addItem(new MenuItem(5, "Change Ticket Status", (short)1));
+		menu.addItem(new MenuItem(6, "View All Closed & Archived Tickets", (short)1));
+		menu.addItem(new MenuItem(0, "Exit the app", (short)0));
+		
+		String menuText = menu.buildMenu((short)0);
+		
+		// Default selection
+		String selection = "";
+		
+		// Loop until we get valid input
+		while (!exitApp) {
+			// Display the menu
+			System.out.println(menuText);
+			
+			// Grab the user's input
+			selection = userInput.nextLine();
+			
+			// If we have a insecure option or we're a technician
+			if (selection.equals("1") || selection.equals("2") || loggedInUser.getLevel() > 0) {
+				switch (selection) {
+					case "0": // Exit program
+						exitApp = true;
+						break;
+					case "1": // Log a ticket
+						System.out.println(NOT_DONE);
+						break;
+					case "2": // View Submitted Open Tickets
+						System.out.println(NOT_DONE);
+						break;
+					case "3": // View Assigned Open Tickets
+						System.out.println(NOT_DONE);
+						break;
+					case "4": // Change Ticket Severity
+						System.out.println(NOT_DONE);
+						break;
+					case "5": // Change Ticket Status
+						System.out.println(NOT_DONE);
+						break;
+					case "6": // View All Closed & Archived Tickets
+						System.out.println(NOT_DONE);
+						break;
+					default:
+						selection = "";
+						break;
+				}
+			} else {
+				// Invalid selection, reset
+				selection = "";
 			}
 		}
 	}
