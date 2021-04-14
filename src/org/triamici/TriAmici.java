@@ -101,6 +101,9 @@ public class TriAmici {
 	}
 	
 	private static void ticketMenu() {
+		// Exit app boolean
+		boolean exitApp = false;
+		
 		// Generate the log in menu
 		Menu menu = new Menu();
 		menu.addItem(new MenuItem(1, "Log a ticket", (short)0));
@@ -109,6 +112,7 @@ public class TriAmici {
 		menu.addItem(new MenuItem(4, "Change Ticket Severity", (short)1));
 		menu.addItem(new MenuItem(5, "Change Ticket Status", (short)1));
 		menu.addItem(new MenuItem(6, "View All Closed & Archived Tickets", (short)1));
+		menu.addItem(new MenuItem(0, "Exit the app", (short)0));
 		
 		String menuText = menu.buildMenu((short)0);
 		
@@ -116,7 +120,7 @@ public class TriAmici {
 		String selection = "";
 		
 		// Loop until we get valid input
-		while (selection.length() == 0) {
+		while (!exitApp) {
 			// Display the menu
 			System.out.println(menuText);
 			
@@ -126,6 +130,9 @@ public class TriAmici {
 			// If we have a insecure option or we're a technician
 			if (selection.equals("1") || selection.equals("2") || loggedInUser.getLevel() > 0) {
 				switch (selection) {
+					case "0": // Exit program
+						exitApp = true;
+						break;
 					case "1": // Log a ticket
 						System.out.println(NOT_DONE);
 						break;
