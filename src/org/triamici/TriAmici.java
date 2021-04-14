@@ -43,6 +43,9 @@ public class TriAmici {
 		// Display the menu
 		userMenu();
 		
+		// New functionality goes here
+		System.out.println("\n\nOur next menu goes here...");
+		
 		// Close user input
 		userInput.close();
 	}
@@ -58,12 +61,6 @@ public class TriAmici {
 		// Default selection
 		String selection = "";
 		
-		// User's input
-		String email = "";
-		String name = "";
-		String phone = "";
-		String password = "";
-		
 		// Loop until we get valid input
 		while (selection.length() == 0) {
 			// Display the menu
@@ -74,9 +71,15 @@ public class TriAmici {
 			
 			switch (selection) {
 				case "1":
-					System.out.println("Not yet commissioned");
+					loggedInUser = logInUser();
 					break;
 				case "2":
+					// User's input
+					String email = "";
+					String name = "";
+					String phone = "";
+					String password = "";
+					
 					// Get the user's email
 					email = userEmail();
 					name = userName();
@@ -94,6 +97,52 @@ public class TriAmici {
 					selection = "";
 			}
 		}
+	}
+	
+	private static User logInUser() {
+		// User's input
+		String email = "";
+		String password = "";
+		User currentUser = null;
+		
+		while(loggedInUser == null)  {
+			// Prompt for the email from the user
+			System.out.println("Enter your email address to log in");
+			email = userInput.nextLine().trim();
+			
+			//Search for the user in the database by email
+			for(User user: storage.getUsers() ) {
+				if(email.equalsIgnoreCase(user.getEmail()) ) 
+					currentUser = user;	
+				
+			}
+			
+			//If the user couldn't be found, start again 
+			if(currentUser == null)
+				System.out.println("User not found! Please try " +
+						"again or register a new user.");
+			
+			else {
+				//Prompt for the password
+				System.out.println("Enter your password.");
+				password = userInput.nextLine().trim();
+				//Check that the password matches.
+				if(password.equals(currentUser.getPassword())) {
+					
+					//If it matches, set the user to be logged in
+					System.out.println("Successfully logged in user " +
+					currentUser.getName() + ".");
+					loggedInUser = currentUser;
+					break;
+				}
+				else
+					System.out.println("Password doesn't match!" +
+				" Please try again or reset your password.");
+				
+			}	
+		}
+		
+		return currentUser;
 	}
 	
 	private static String userEmail() {
