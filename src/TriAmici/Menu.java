@@ -29,7 +29,7 @@ public class Menu {
 	
 	// Build the menu without access level
 	public String buildMenu() {
-		// Return the menu with a defaul menu level of 0
+		// Return the menu with a default menu level of 0
 		return buildMenu((short)0);
 	}
 	
