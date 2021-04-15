@@ -1,20 +1,23 @@
 package org.triamici;
+
+import java.time.LocalDateTime;
+
 /**
  * @author Assignment Group 9
  *
  */
 
 public class Ticket { // User class for creating Tickets objects
-	private String name; // User's name variable
+	private String creator; // User's email variable
 	private String description; // A description of the  fault
-	private String assignee; // The support technician assigned to the fault
-	private int severity; // The issue severity
-	private String status; // The status of the issue
+	private String assignee; // The support technician's email assigned to the fault
+	private short severity; // The issue severity
+	private short status; // The status of the issue
 	private boolean resolved; // resolved Y/N
-	private String time; // The time the issues was closed
+	private LocalDateTime time; // The time the issues was closed
 	
-	public Ticket(String name, String description, String assignee, int severity, String status, boolean resolved, String time) { //Constructor 
-		this.name = name;
+	public Ticket(String creator, String description, String assignee, short severity, short status, boolean resolved, LocalDateTime time) { //Constructor 
+		this.creator = creator;
 		this.description = description;
 		this.assignee = assignee;
 		this.severity = severity;
@@ -23,8 +26,8 @@ public class Ticket { // User class for creating Tickets objects
 		this.time = time;
 	}
 
-	public String getName() { // Returns the user's name
-		return name;
+	public String getCreator() { // Returns the user's name
+		return creator;
 	}
 	
 	public String getDescription() { // Returns the ticket's description email
@@ -35,11 +38,11 @@ public class Ticket { // User class for creating Tickets objects
 		return assignee;
 	}
 	
-	public int getSeverity() { // Returns the ticket's Severity
+	public short getSeverity() { // Returns the ticket's Severity
 		return severity;
 	}
 	
-	public String getStatus() { // Returns the ticket's status
+	public short getStatus() { // Returns the ticket's status
 		return status;
 	}
 
@@ -47,15 +50,15 @@ public class Ticket { // User class for creating Tickets objects
 		return resolved;
 	}
 	
-	public String getTime() { // Returns the ticket's time stamp
+	public LocalDateTime getTime() { // Returns the ticket's time stamp
 		return time;
 	}
 	
-	public void setSeverity(int severity) { // Sets the ticket's Severity
+	public void setSeverity(short severity) { // Sets the ticket's Severity
 		this.severity = severity; 
 	}
 	
-	public void setStatus(String status) { // Sets the ticket's Status
+	public void setStatus(short status) { // Sets the ticket's Status
 		this.status = status; 
 	}
 	
@@ -63,7 +66,7 @@ public class Ticket { // User class for creating Tickets objects
 		this.resolved = resolved; 
 	}
 	
-	public void setTime (String time) { // Sets the ticket's time stamp
+	public void setTime (LocalDateTime time) { // Sets the ticket's time stamp
 		this.time = time; 
 	}
 }

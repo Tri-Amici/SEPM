@@ -5,7 +5,13 @@
 package org.triamici;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class TriAmici {
 
@@ -100,7 +106,7 @@ public class TriAmici {
 		}
 	}
 	
-	private static void ticketMenu() {
+	private static void ticketMenu() throws IOException {
 		// Exit app boolean
 		boolean exitApp = false;
 		
@@ -134,7 +140,7 @@ public class TriAmici {
 						exitApp = true;
 						break;
 					case "1": // Log a ticket
-						System.out.println(NOT_DONE);
+						logTicket();
 						break;
 					case "2": // View Submitted Open Tickets
 						System.out.println(NOT_DONE);
@@ -152,17 +158,92 @@ public class TriAmici {
 						System.out.println(NOT_DONE);
 						break;
 					default:
-						selection = "";
 						break;
 				}
-			} else {
-				// Invalid selection, reset
-				selection = "";
 			}
 		}
 	}
 	
-	private static User logInUser() {
+	private static void logTicket() throws IOException {
+		
+		String description = "";
+		String severity = "";
+		
+		// Prompt for the ticket description from the user
+		while (description.length() == 0) {
+			System.out.println("Enter a ticket description");
+			description = userInput.nextLine().trim();
+		}
+		
+		// Prompt for the ticket severity from the user
+		while (severity.equals("")) {
+			System.out.println("Enter a ticket severity\n0 - Low priority\n1 - Medium priority\n2 = High priority");
+			severity = userInput.nextLine().trim();
+			
+			if (!Validation.validInteger(severity) ||
+					!Validation.validShortRange((short)0, (short)2, Short.parseShort(severity))) {
+				severity = "";
+			}
+		}
+		
+		// Get the ticket lists
+		LinkedList<TicketAssignment> ticketAssignments = new LinkedList<>();
+		final short neededTechnician = (short) (Short.parseShort(severity) != (short)2 ? 1 : 2);
+		
+		// Get the technician email addresses
+		List<String> user = storage.getUsers()
+				.stream()
+				.filter(u -> u.getLevel() == neededTechnician)
+				.map(User::getEmail)
+				.collect(Collectors.toList());
+		
+		// Loop through the tickets and get each technician's ticket count
+		user
+			.stream()
+			.forEach(u -> 
+				ticketAssignments.add(
+						new TicketAssignment(u,
+								storage.getTickets()
+									.stream()
+									.filter(t -> t.getAssignee().equals(u))
+									.collect(Collectors.counting()))
+						)
+			);
+			
+		// Get the technician with the least amount of tickets
+		Optional<TicketAssignment> assignee = ticketAssignments
+				.stream()
+				.sorted(Comparator.comparing(TicketAssignment::getCount))
+				.findFirst();
+		
+		
+		// Log a new instance of a ticket
+		if (assignee.isPresent()) {
+			// Add the ticket
+			storage.addTicket(
+					new Ticket(
+						loggedInUser.getEmail(),
+						description,
+						assignee.get().getAssignee(),
+						Short.parseShort(severity),
+						(short)0,
+						false,
+						LocalDateTime.now()
+						)
+					);
+			
+			// Save the data
+			storage.saveTicketData();
+			
+			// Success message
+			System.out.println("Ticket logged!");
+		} else {
+			// Failure message
+			System.out.println("No technicians in the system");
+		}
+	}
+	
+ 	private static User logInUser() {
 		// User's input
 		String email = "";
 		String password = "";
