@@ -8,12 +8,12 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Storage {
 	private LinkedList<User> users; // The user object array
-	private int numTickets; // Current number of Tickets
 	private LinkedList<Ticket> tickets; // The Ticket object array
 	private String fileDir; // location of the csv data files (e.g c:/users/...)
 	
@@ -35,6 +35,10 @@ public class Storage {
 
 	public List<User> getUsers() {
 		return users;
+	}
+
+	public List<Ticket> getTickets() {
+		return tickets;
 	}
 	
 	/**
@@ -95,10 +99,10 @@ public class Storage {
 			String currLine = inFile.readLine();
 			while (currLine != null && currLine.trim().length() > 0) { // A bit of input validation
 				tempInput = currLine.split(","); // Split line into array elements
-				this.addTicket(tempInput[0], tempInput[1], tempInput[2], Integer.parseInt(tempInput[3]), tempInput[4],
-						Boolean.parseBoolean(tempInput[5]), tempInput[6]);
+				this.addTicket(new Ticket(tempInput[0], tempInput[1], tempInput[2], 
+						Short.parseShort(tempInput[3]), Short.parseShort(tempInput[4]),
+						Boolean.parseBoolean(tempInput[5]), LocalDateTime.parse(tempInput[6].trim())));
 				currLine = inFile.readLine();
-				numTickets++;
 			}
 		}
 	}
@@ -106,16 +110,15 @@ public class Storage {
 	/**
 	 * Add a ticket to the ticket array
 	 */
-	public void addTicket(String name, String description, String assignee, int severity, String status,
-			boolean resolved, String time) {
-		tickets.add(new Ticket(name, description, assignee, severity, status, resolved, time));
+	public void addTicket(Ticket ticket) {
+		tickets.add(ticket);
 	}
 	
 	/**
 	 * Return the current number of Tickets in the system
 	 */
 	 public int getNumTickets() {
-		 return numTickets;
+		 return this.tickets.size();
 	 }
 
 	 /**
@@ -125,7 +128,7 @@ public class Storage {
 	public void saveTicketData() throws IOException { // Save data to file
 		try (BufferedWriter outFile = new BufferedWriter(new FileWriter(fileDir + "TicketData.csv"))) {
 			for (Ticket ticket: this.tickets)
-				outFile.write(ticket.getName() + "," + ticket.getDescription() + ","
+				outFile.write(ticket.getCreator() + "," + ticket.getDescription() + ","
 						+ ticket.getAssignee() + "," + ticket.getSeverity() + ","
 						+ ticket.getStatus() + "," + ticket.getResolved() + ","
 						+ ticket.getTime() + System.getProperty("line.separator"));
