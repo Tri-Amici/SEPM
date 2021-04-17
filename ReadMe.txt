@@ -22,7 +22,7 @@
 	java org.triamici.TriAmici
 	
 ---------------------------------------------------------------------------------
-						      Application Usage
+                               Application Usage
 ---------------------------------------------------------------------------------
 When the java application is first run users will be presented with the following 
 Main Menu:
