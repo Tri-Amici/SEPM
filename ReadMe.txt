@@ -6,7 +6,7 @@
 ----------------------------------------------------------------------------
 1. Copy the project zip file to RMIT's myDesktop H:\ drive
 
-2. Unpack the zip file to H:\ You should see H:\Group 9_SEPM_A2_Sprint1
+2. Unpack the zip file to H:\ You should see H:\Group 9_SEPM_A2_Sprint2
 
 3. Open the JDK command prompt and navigate to the java project source files:
 	cd "Group 9_SEPM_A2_Sprint1\code\src\org\triamici\"
