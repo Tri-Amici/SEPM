@@ -62,6 +62,7 @@ public class TriAmici {
 		Menu menu = new Menu();
 		menu.addItem(new MenuItem(1, "Log in", (short)0));
 		menu.addItem(new MenuItem(2, "Register as new user", (short)0));
+		menu.addItem(new MenuItem(3, "Retrieve password", (short)0));
 		
 		String menuText = menu.buildMenu((short)0);
 		
@@ -100,6 +101,8 @@ public class TriAmici {
 					storage.addUser(loggedInUser);
 					storage.saveUserData();
 					break;
+				case "3":
+					retrievePassword();
 				default:
 					selection = "";
 			}
@@ -372,5 +375,35 @@ public class TriAmici {
 		
 		// Return the user's phone number
 		return password;
+	}
+	
+	private static void retrievePassword() {
+		// Prompt for the email from the user
+		String email = "";
+		boolean emailMatch = false;
+		
+		while (email.length() == 0) {
+			System.out.println("Enter your email address");
+			email = userInput.nextLine().trim();
+			
+			// Validate the email and set to blank if not valid
+			if (!Validation.validEmail(email)) {
+				System.out.println("You need to enter a valid email");
+				email = "";
+			} else {
+				// Loop through the users
+				for (User user : storage.getUsers()) {
+					// If the user is already in the system
+					if (user.getEmail().equalsIgnoreCase(email)) {
+						emailMatch = true;
+						System.out.println("User found, Your password is: " + user.getPassword());						
+						break;
+					}
+				}
+				if (!emailMatch)
+						System.out.println("Sorry, the email address was not found");
+			}
+		}
+	
 	}
 }
