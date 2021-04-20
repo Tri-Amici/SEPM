@@ -5,6 +5,7 @@
 package org.triamici;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -125,7 +126,7 @@ public class TriAmici {
 		menu.addItem(new MenuItem(6, "View All Closed & Archived Tickets", (short)1));
 		menu.addItem(new MenuItem(0, "Exit the app", (short)0));
 		
-		String menuText = menu.buildMenu((short)0);
+		String menuText = menu.buildMenu(loggedInUser.getLevel());
 		
 		// Default selection
 		String selection = "";
@@ -168,7 +169,11 @@ public class TriAmici {
 						System.out.println(NOT_DONE);
 						break;
 					case "6": // View All Closed & Archived Tickets
-						System.out.println(NOT_DONE);
+						displayTickets(
+								storage.getTickets()
+								.stream()
+								.filter(Ticket::getResolved)
+								);
 						break;
 					default:
 						break;
@@ -419,21 +424,23 @@ public class TriAmici {
 	private static void displayTickets(Stream<Ticket> stream) {
 		final short shortField = 10;
 		final short longField = 35;
-		final short mediumField = 35;
+		final short mediumField = 15;
 		final char lineChar = '-';
 		
 		// Display the headers
 		System.out.print(String.format("%-" + shortField + "s", "ID"));
-		System.out.print(String.format("%-" + longField + "s", "Creator"));
-		System.out.print(String.format("%-" + longField + "s", "Assignee"));
+		System.out.print(String.format("%-" + mediumField + "s", "Creator"));
+		System.out.print(String.format("%-" + mediumField + "s", "Assignee"));
 		System.out.print(String.format("%-" + mediumField + "s", "Severity"));
+		System.out.print(String.format("%-" + longField + "s", "Status"));
 		System.out.print(String.format("%-" + longField + "s", "Description"));
 		System.out.println();
 		
 		System.out.print(repeat(lineChar, shortField - 1) + " ");
-		System.out.print(repeat(lineChar, longField - 1) + " ");
-		System.out.print(repeat(lineChar, longField - 1) + " ");
 		System.out.print(repeat(lineChar, mediumField - 1) + " ");
+		System.out.print(repeat(lineChar, mediumField - 1) + " ");
+		System.out.print(repeat(lineChar, mediumField - 1) + " ");
+		System.out.print(repeat(lineChar, longField - 1) + " ");
 		System.out.print(repeat(lineChar, longField - 1));
 		System.out.println();
 		
@@ -453,9 +460,12 @@ public class TriAmici {
 			
 			// Display the ticket ID
 			System.out.print(String.format("%-" + shortField + "s", t.getId()));
-			System.out.print(String.format("%-" + longField + "s", creator.isPresent() ? creator.get().getName() : "NA"));
-			System.out.print(String.format("%-" + longField + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
+			System.out.print(String.format("%-" + mediumField + "s", creator.isPresent() ? creator.get().getName() : "NA"));
+			System.out.print(String.format("%-" + mediumField + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
 			System.out.print(String.format("%-" + mediumField + "s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
+			System.out.print(String.format("%-" + longField + "s", 
+					(t.getResolved() ? "Closed" : "Open") + 
+					(Duration.between(t.getTime(), LocalDateTime.now()).toMinutes() > 1440 && t.getResolved() ? " - ARCHIVED" : "")));
 			System.out.print(t.getDescription());
 			System.out.println();
 		});
