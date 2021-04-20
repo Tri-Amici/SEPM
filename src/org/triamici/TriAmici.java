@@ -14,8 +14,6 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.sun.tools.javac.util.StringUtils;
-
 public class TriAmici {
 
 	static User loggedInUser;
@@ -106,6 +104,7 @@ public class TriAmici {
 					break;
 				case "3":
 					retrievePassword();
+					break;
 				default:
 					selection = "";
 			}
@@ -414,19 +413,23 @@ public class TriAmici {
 	}
 	
 	private static void displayTickets(Stream<Ticket> stream) {
+		final short shortField = 10;
+		final short longField = 35;
+		final short mediumField = 35;
+		
 		// Display the headers
-		System.out.print(String.format("%-7s", "ID"));
-		System.out.print(String.format("%-35s", "Creator"));
-		System.out.print(String.format("%-35s", "Assignee"));
-		System.out.print(String.format("%-15s", "Severity"));
-		System.out.print(String.format("%-30s", "Description"));
+		System.out.print(String.format("%-" + shortField + "s", "ID"));
+		System.out.print(String.format("%-" + longField + "s", "Creator"));
+		System.out.print(String.format("%-" + longField + "s", "Assignee"));
+		System.out.print(String.format("%-" + mediumField + "s", "Severity"));
+		System.out.print(String.format("%-" + longField + "s", "Description"));
 		System.out.println();
 		
-		System.out.print("-".repeat(6) + " ");
-		System.out.print("-".repeat(34) + " ");
-		System.out.print("-".repeat(34) + " ");
-		System.out.print("-".repeat(14) + " ");
-		System.out.print("-".repeat(30));
+		System.out.print("-".repeat(shortField - 1) + " ");
+		System.out.print("-".repeat(longField - 1) + " ");
+		System.out.print("-".repeat(longField - 1) + " ");
+		System.out.print("-".repeat(mediumField - 1) + " ");
+		System.out.print("-".repeat(longField - 1));
 		System.out.println();
 		
 		// Loop through the tickets
@@ -444,10 +447,10 @@ public class TriAmici {
 					.findFirst();
 			
 			// Display the ticket ID
-			System.out.print(String.format("%-7s", t.getId()));
-			System.out.print(String.format("%-35s", creator.isPresent() ? creator.get().getName() : "NA"));
-			System.out.print(String.format("%-35s", assignee.isPresent() ? assignee.get().getName() : "NA"));
-			System.out.print(String.format("%-15s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
+			System.out.print(String.format("%-" + shortField + "s", t.getId()));
+			System.out.print(String.format("%-" + longField + "s", creator.isPresent() ? creator.get().getName() : "NA"));
+			System.out.print(String.format("%-" + longField + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
+			System.out.print(String.format("%-" + mediumField + "s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
 			System.out.print(t.getDescription());
 			System.out.println();
 		});
