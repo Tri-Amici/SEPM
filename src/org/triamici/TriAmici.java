@@ -222,6 +222,7 @@ public class TriAmici {
 			// Add the ticket
 			storage.addTicket(
 					new Ticket(
+						0,
 						loggedInUser.getEmail(),
 						description,
 						assignee.get().getAssignee(),

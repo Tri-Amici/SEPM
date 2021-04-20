@@ -9,8 +9,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Storage {
 	private LinkedList<User> users; // The user object array
@@ -99,9 +102,9 @@ public class Storage {
 			String currLine = inFile.readLine();
 			while (currLine != null && currLine.trim().length() > 0) { // A bit of input validation
 				tempInput = currLine.split(","); // Split line into array elements
-				this.addTicket(new Ticket(tempInput[0], tempInput[1], tempInput[2], 
-						Short.parseShort(tempInput[3]), Short.parseShort(tempInput[4]),
-						Boolean.parseBoolean(tempInput[5]), LocalDateTime.parse(tempInput[6].trim())));
+				this.addTicket(new Ticket(Integer.parseInt(tempInput[0]), tempInput[1], tempInput[2], 
+						tempInput[3], Short.parseShort(tempInput[4]), Short.parseShort(tempInput[5]),
+						Boolean.parseBoolean(tempInput[6]), LocalDateTime.parse(tempInput[7].trim())));
 				currLine = inFile.readLine();
 			}
 		}
@@ -111,6 +114,22 @@ public class Storage {
 	 * Add a ticket to the ticket array
 	 */
 	public void addTicket(Ticket ticket) {
+		// Default the ticket ID
+		int ticketID = 1;
+		
+		// the maximum ticket ID
+		Optional<Ticket> maxTicket = tickets
+				.stream()
+				.max(Comparator.comparingInt(Ticket::getId));
+		
+		// Add 1 to the ticket
+		if (maxTicket.isPresent())
+			ticketID = maxTicket.get().getId() + 1;
+		
+		// Set the ticket ID
+		ticket.setId(ticketID);
+		
+		// Add the ticket
 		tickets.add(ticket);
 	}
 	
@@ -128,10 +147,11 @@ public class Storage {
 	public void saveTicketData() throws IOException { // Save data to file
 		try (BufferedWriter outFile = new BufferedWriter(new FileWriter(fileDir + "TicketData.csv"))) {
 			for (Ticket ticket: this.tickets)
-				outFile.write(ticket.getCreator() + "," + ticket.getDescription() + ","
-						+ ticket.getAssignee() + "," + ticket.getSeverity() + ","
-						+ ticket.getStatus() + "," + ticket.getResolved() + ","
-						+ ticket.getTime() + System.getProperty("line.separator"));
+				outFile.write(ticket.getId() + "," + ticket.getCreator() + "," 
+						+ ticket.getDescription() + "," + ticket.getAssignee() + "," 
+						+ ticket.getSeverity() + "," + ticket.getStatus() + "," 
+						+ ticket.getResolved() + "," + ticket.getTime() 
+						+ System.getProperty("line.separator"));
 			outFile.flush();
 		} catch (Exception e) {
 			// Print the exception
