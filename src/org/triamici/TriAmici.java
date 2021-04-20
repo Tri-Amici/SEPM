@@ -416,6 +416,7 @@ public class TriAmici {
 		final short shortField = 10;
 		final short longField = 35;
 		final short mediumField = 35;
+		final String lineChar = "-";
 		
 		// Display the headers
 		System.out.print(String.format("%-" + shortField + "s", "ID"));
@@ -425,11 +426,11 @@ public class TriAmici {
 		System.out.print(String.format("%-" + longField + "s", "Description"));
 		System.out.println();
 		
-		System.out.print("-".repeat(shortField - 1) + " ");
-		System.out.print("-".repeat(longField - 1) + " ");
-		System.out.print("-".repeat(longField - 1) + " ");
-		System.out.print("-".repeat(mediumField - 1) + " ");
-		System.out.print("-".repeat(longField - 1));
+		System.out.print(lineChar.repeat(shortField - 1) + " ");
+		System.out.print(lineChar.repeat(longField - 1) + " ");
+		System.out.print(lineChar.repeat(longField - 1) + " ");
+		System.out.print(lineChar.repeat(mediumField - 1) + " ");
+		System.out.print(lineChar.repeat(longField - 1));
 		System.out.println();
 		
 		// Loop through the tickets
