@@ -155,7 +155,11 @@ public class TriAmici {
 								);
 						break;
 					case "3": // View Assigned Open Tickets
-						System.out.println(NOT_DONE);
+						displayTickets(
+								storage.getTickets()
+								.stream()
+								.filter(t -> t.getAssignee().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
+								);
 						break;
 					case "4": // Change Ticket Severity
 						System.out.println(NOT_DONE);
