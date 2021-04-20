@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.sun.tools.javac.util.StringUtils;
 
 public class TriAmici {
 
@@ -146,7 +149,11 @@ public class TriAmici {
 						logTicket();
 						break;
 					case "2": // View Submitted Open Tickets
-						System.out.println(NOT_DONE);
+						displayTickets(
+								storage.getTickets()
+								.stream()
+								.filter(t -> t.getCreator().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
+								);
 						break;
 					case "3": // View Assigned Open Tickets
 						System.out.println(NOT_DONE);
@@ -404,6 +411,45 @@ public class TriAmici {
 						System.out.println("Sorry, the email address was not found");
 			}
 		}
+	}
 	
+	private static void displayTickets(Stream<Ticket> stream) {
+		// Display the headers
+		System.out.print(String.format("%-7s", "ID"));
+		System.out.print(String.format("%-35s", "Creator"));
+		System.out.print(String.format("%-35s", "Assignee"));
+		System.out.print(String.format("%-15s", "Severity"));
+		System.out.print(String.format("%-30s", "Description"));
+		System.out.println();
+		
+		System.out.print("-".repeat(6) + " ");
+		System.out.print("-".repeat(34) + " ");
+		System.out.print("-".repeat(34) + " ");
+		System.out.print("-".repeat(14) + " ");
+		System.out.print("-".repeat(30));
+		System.out.println();
+		
+		// Loop through the tickets
+		stream.forEach(t -> {
+			// Retrieve the creator
+			Optional<User> creator = storage.getUsers()
+					.stream()
+					.filter(u -> u.getEmail().equalsIgnoreCase(t.getCreator()))
+					.findFirst();
+			
+			// Retrieve the assignee
+			Optional<User> assignee = storage.getUsers()
+					.stream()
+					.filter(u -> u.getEmail().equalsIgnoreCase(t.getAssignee()))
+					.findFirst();
+			
+			// Display the ticket ID
+			System.out.print(String.format("%-7s", t.getId()));
+			System.out.print(String.format("%-35s", creator.isPresent() ? creator.get().getName() : "NA"));
+			System.out.print(String.format("%-35s", assignee.isPresent() ? assignee.get().getName() : "NA"));
+			System.out.print(String.format("%-15s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
+			System.out.print(t.getDescription());
+			System.out.println();
+		});
 	}
 }
