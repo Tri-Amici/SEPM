@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
  */
 
 public class Ticket { // User class for creating Tickets objects
+	private int id = 0; // The ticket's ID
 	private String creator; // User's email variable
 	private String description; // A description of the  fault
 	private String assignee; // The support technician's email assigned to the fault
@@ -16,7 +17,8 @@ public class Ticket { // User class for creating Tickets objects
 	private boolean resolved; // resolved Y/N
 	private LocalDateTime time; // The time the issues was closed
 	
-	public Ticket(String creator, String description, String assignee, short severity, short status, boolean resolved, LocalDateTime time) { //Constructor 
+	public Ticket(int id, String creator, String description, String assignee, short severity, short status, boolean resolved, LocalDateTime time) { //Constructor 
+		this.id = id;
 		this.creator = creator;
 		this.description = description;
 		this.assignee = assignee;
@@ -25,7 +27,11 @@ public class Ticket { // User class for creating Tickets objects
 		this.resolved = resolved;
 		this.time = time;
 	}
-
+	
+	public int getId() { // Sets the ticket ID
+		return this.id;
+	}
+	
 	public String getCreator() { // Returns the user's name
 		return creator;
 	}
@@ -52,6 +58,10 @@ public class Ticket { // User class for creating Tickets objects
 	
 	public LocalDateTime getTime() { // Returns the ticket's time stamp
 		return time;
+	}
+	
+	public void setId(int id) { // Sets the ticket ID
+		this.id = id;
 	}
 	
 	public void setSeverity(short severity) { // Sets the ticket's Severity

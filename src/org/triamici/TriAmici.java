@@ -5,6 +5,7 @@
 package org.triamici;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TriAmici {
 
@@ -103,6 +105,7 @@ public class TriAmici {
 					break;
 				case "3":
 					retrievePassword();
+					break;
 				default:
 					selection = "";
 			}
@@ -123,7 +126,7 @@ public class TriAmici {
 		menu.addItem(new MenuItem(6, "View All Closed & Archived Tickets", (short)1));
 		menu.addItem(new MenuItem(0, "Exit the app", (short)0));
 		
-		String menuText = menu.buildMenu((short)0);
+		String menuText = menu.buildMenu(loggedInUser.getLevel());
 		
 		// Default selection
 		String selection = "";
@@ -146,10 +149,18 @@ public class TriAmici {
 						logTicket();
 						break;
 					case "2": // View Submitted Open Tickets
-						System.out.println(NOT_DONE);
+						displayTickets(
+								storage.getTickets()
+								.stream()
+								.filter(t -> t.getCreator().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
+								);
 						break;
 					case "3": // View Assigned Open Tickets
-						System.out.println(NOT_DONE);
+						displayTickets(
+								storage.getTickets()
+								.stream()
+								.filter(t -> t.getAssignee().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
+								);
 						break;
 					case "4": // Change Ticket Severity
 						System.out.println(NOT_DONE);
@@ -158,7 +169,11 @@ public class TriAmici {
 						System.out.println(NOT_DONE);
 						break;
 					case "6": // View All Closed & Archived Tickets
-						System.out.println(NOT_DONE);
+						displayTickets(
+								storage.getTickets()
+								.stream()
+								.filter(Ticket::getResolved)
+								);
 						break;
 					default:
 						break;
@@ -225,6 +240,7 @@ public class TriAmici {
 			// Add the ticket
 			storage.addTicket(
 					new Ticket(
+						0,
 						loggedInUser.getEmail(),
 						description,
 						assignee.get().getAssignee(),
@@ -403,6 +419,64 @@ public class TriAmici {
 						System.out.println("Sorry, the email address was not found");
 			}
 		}
+	}
 	
+	private static void displayTickets(Stream<Ticket> stream) {
+		final short shortField = 10;
+		final short longField = 35;
+		final short mediumField = 15;
+		final char lineChar = '-';
+		
+		// Display the headers
+		System.out.print(String.format("%-" + shortField + "s", "ID"));
+		System.out.print(String.format("%-" + mediumField + "s", "Creator"));
+		System.out.print(String.format("%-" + mediumField + "s", "Assignee"));
+		System.out.print(String.format("%-" + mediumField + "s", "Severity"));
+		System.out.print(String.format("%-" + longField + "s", "Status"));
+		System.out.print(String.format("%-" + longField + "s", "Description"));
+		System.out.println();
+		
+		System.out.print(repeat(lineChar, shortField - 1) + " ");
+		System.out.print(repeat(lineChar, mediumField - 1) + " ");
+		System.out.print(repeat(lineChar, mediumField - 1) + " ");
+		System.out.print(repeat(lineChar, mediumField - 1) + " ");
+		System.out.print(repeat(lineChar, longField - 1) + " ");
+		System.out.print(repeat(lineChar, longField - 1));
+		System.out.println();
+		
+		// Loop through the tickets
+		stream.forEach(t -> {
+			// Retrieve the creator
+			Optional<User> creator = storage.getUsers()
+					.stream()
+					.filter(u -> u.getEmail().equalsIgnoreCase(t.getCreator()))
+					.findFirst();
+			
+			// Retrieve the assignee
+			Optional<User> assignee = storage.getUsers()
+					.stream()
+					.filter(u -> u.getEmail().equalsIgnoreCase(t.getAssignee()))
+					.findFirst();
+			
+			// Display the ticket ID
+			System.out.print(String.format("%-" + shortField + "s", t.getId()));
+			System.out.print(String.format("%-" + mediumField + "s", creator.isPresent() ? creator.get().getName() : "NA"));
+			System.out.print(String.format("%-" + mediumField + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
+			System.out.print(String.format("%-" + mediumField + "s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
+			System.out.print(String.format("%-" + longField + "s", 
+					(t.getResolved() ? "Closed" : "Open") + 
+					(Duration.between(t.getTime(), LocalDateTime.now()).toMinutes() > 1440 && t.getResolved() ? " - ARCHIVED" : "")));
+			System.out.print(t.getDescription());
+			System.out.println();
+		});
+	}
+	
+	private static String repeat(char lineChar, int number) {
+		StringBuilder bld = new StringBuilder();
+		
+		for (short i = 0; i < number; i++)
+			bld.append(lineChar);
+		
+		return bld.toString();
 	}
 }
