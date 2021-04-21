@@ -21,6 +21,10 @@ public class TriAmici {
 	static Storage storage;
 	static Scanner userInput;
 	static final String NOT_DONE = "Not yet commissioned...";
+	static final short shortField = 10;
+	static final short longField = 35;
+	static final short mediumField = 15;
+	static final char lineChar = '-';
 	
 	/**
 	 * Main application method
@@ -127,6 +131,7 @@ public class TriAmici {
 		menu.addItem(new MenuItem(4, "Change Ticket Severity", (short)1));
 		menu.addItem(new MenuItem(5, "Change Ticket Status", (short)1));
 		menu.addItem(new MenuItem(6, "View All Closed & Archived Tickets", (short)1));
+		menu.addItem(new MenuItem(7, "Display Report", (short)1));
 		menu.addItem(new MenuItem(0, "Exit the app", (short)0));
 		
 		String menuText = menu.buildMenu(loggedInUser.getLevel());
@@ -178,6 +183,12 @@ public class TriAmici {
 								.filter(Ticket::getResolved)
 								);
 						break;
+					case "7": // Display Report
+						displayTickets(
+								storage.getTickets()
+								.stream()
+								);	
+								break;
 					default:
 						break;
 				}
@@ -425,10 +436,6 @@ public class TriAmici {
 	}
 	
 	private static void displayTickets(Stream<Ticket> stream) {
-		final short shortField = 10;
-		final short longField = 35;
-		final short mediumField = 15;
-		final char lineChar = '-';
 		
 		// Display the headers
 		System.out.print(String.format("%-" + shortField + "s", "ID"));
@@ -474,7 +481,20 @@ public class TriAmici {
 		});
 	}
 	
-	private static void generateReport(Stream<Ticket> stream) {}
+	
+	
+	private static void DisplayReport(Stream<Ticket> stream) {
+		
+		
+		//TODO: Display the count of resolved and unresolved tickets.
+		
+		
+		
+		
+		
+	}
+	
+	
 	
 	private static String repeat(char lineChar, int number) {
 		StringBuilder bld = new StringBuilder();
