@@ -34,15 +34,18 @@ public class TriAmici {
 		
 		// Check if we're running in Eclipse
 		for(int i = 0; i < args.length; i++)
-			if (args[0].contains("-runInEclipse"))
+			if (args[i].contains("-runInEclipse"))
 				runInEclipse = true;
-			else if (args[0].contains("-runInCI")) {
+			else if (args[i].contains("-runInCI")) {
 				System.out.println("CI: running smoke test and quitting...");	
 				runningInCI = true;
 			}
 		
 		// Create a new instance of the Storage class
+		
+		
 		storage = new Storage(runInEclipse);
+		
 		
 		// Quit if we're running in CI
 		if (runningInCI) {
@@ -470,6 +473,8 @@ public class TriAmici {
 			System.out.println();
 		});
 	}
+	
+	private static void generateReport(Stream<Ticket> stream) {}
 	
 	private static String repeat(char lineChar, int number) {
 		StringBuilder bld = new StringBuilder();
