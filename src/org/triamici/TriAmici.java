@@ -495,10 +495,11 @@ public class TriAmici {
 				numResolved++;
 			else
 				numUnresolved++;
-		
-		
-	
-		
+			
+			/* TODO: System.out(String.format())
+			 * Display resolved and unresolved tickets apart
+			 * or together?
+			 */
 		});
 		
 		System.out.println("Resolved Tickets: " + numResolved +
