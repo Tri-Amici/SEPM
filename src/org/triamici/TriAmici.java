@@ -165,31 +165,36 @@ public class TriAmici {
 						break;
 					case "4": // Change Ticket Severity
 						// Get the open tickets
-						List<Ticket> openTickets = storage.getTickets()
+						List<Ticket> openTickets1 = storage.getTickets()
 									.stream()
 									.filter(t -> !t.getClosed())
 									.collect(Collectors.toList());
 						
 						// Display the open tickets
-						displayTickets(openTickets);
+						displayTickets(openTickets1);
 						
 						// Prompt for the severity
-						changeSeverity(openTickets);
+						changeSeverity(openTickets1);
 
 						break;
 					case "5": // Change Ticket Status
-						displayTickets(
-								storage.getTickets()
-								.stream()
-								.filter(t -> Duration.between(t.getTime(), LocalDateTime.now()).toMinutes() < 1440)
-								.collect(Collectors.toList())
-								);
+						// Get the open tickets
+						List<Ticket> openTickets2 = storage.getTickets()
+									.stream()
+									.filter(t -> !t.getClosed() || t.getClosed() && Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() < 1440)
+									.collect(Collectors.toList());
+						
+						// Display the open tickets
+						displayTickets(openTickets2);
+						
+						// Prompt for status
+						changeStatus(openTickets2);
 						break;
 					case "6": // View All Closed & Archived Tickets
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(Ticket::getResolved)
+								.filter(Ticket::getClosed)
 								.collect(Collectors.toList())
 								);
 						break;
@@ -197,6 +202,62 @@ public class TriAmici {
 						break;
 				}
 			}
+		}
+	}
+	
+	private static void changeStatus(List<Ticket> tickets) throws IOException {
+		String[] ticketID = new String[] {""};
+		String status = "";
+		String resolved = "";
+		
+		// Loop through until the ticket ID is not blank
+		while (ticketID[0].equals("")) {
+			// Prompt for the ticket ID
+			System.out.println("Please enter a ticket ID");
+			ticketID[0] = userInput.nextLine();
+			
+			// Check that it is a valid integer and that the ID exists in the tickets
+			if (!Validation.validInteger(ticketID[0]) || 
+					tickets.stream().filter(t -> t.getId() == Integer.parseInt(ticketID[0])).count() == 0) {
+				ticketID[0] = "";
+			}
+		}
+		
+		// Prompt for the ticket status from the user
+		while (status.equals("")) {
+			System.out.println("Enter a ticket status\n0 - Closed\n1 - Open");
+			status = userInput.nextLine().trim();
+			
+			if (!Validation.validInteger(status) ||
+					!Validation.validShortRange((short)0, (short)1, Short.parseShort(status))) {
+				status = "";
+			}
+		}
+		
+		// Prompt for the ticket resolution from the user
+		if (status.equals("0"))
+			while (resolved.equals("")) {
+				System.out.println("Was the issue resolved\n0 - Not resolved\n1 - Resolved");
+				resolved = userInput.nextLine().trim();
+				
+				if (!Validation.validInteger(resolved) ||
+						!Validation.validShortRange((short)0, (short)1, Short.parseShort(resolved))) {
+					resolved = "";
+				}
+			}
+		
+		// Grab the ticket
+		Optional<Ticket> ticketToUpdate = tickets
+				.stream()
+				.filter(t -> t.getId() == Integer.parseInt(ticketID[0]))
+				.findFirst();
+		
+		// Update the ticket
+		if (ticketToUpdate.isPresent()) {
+			ticketToUpdate.get().setClosed(status.equals("0"));
+			ticketToUpdate.get().setResolved(resolved.equals("1"));
+			ticketToUpdate.get().setCloseTime(status.equals("0") ?  LocalDateTime.now() : LocalDateTime.of(1970, 1, 1, 0, 0));
+			storage.saveTicketData();
 		}
 	}
 	
@@ -229,13 +290,16 @@ public class TriAmici {
 			}
 		}
 		
+		// Get the new assignee
 		assignee = getAssignee(Short.parseShort(severity));
 		
+		// Grab the ticket
 		Optional<Ticket> ticketToUpdate = tickets
 				.stream()
 				.filter(t -> t.getId() == Integer.parseInt(ticketID[0]))
 				.findFirst();
 		
+		// Update the ticket
 		if (ticketToUpdate.isPresent()) {
 			ticketToUpdate.get().setAssignee(assignee);
 			ticketToUpdate.get().setSeverity(Short.parseShort(severity));
@@ -277,7 +341,8 @@ public class TriAmici {
 					Short.parseShort(severity),
 					false,
 					false,
-					LocalDateTime.now()
+					LocalDateTime.now(),
+					LocalDateTime.of(1970, 1, 1, 0, 0)
 					)
 				);
 		
@@ -531,7 +596,7 @@ public class TriAmici {
 			System.out.print(String.format("%-" + mediumField + "s", t.getResolved() ? "Resolved" : "Unresolved"));
 			System.out.print(String.format("%-" + longField + "s", 
 					(t.getClosed() ? "Closed" : "Open") + 
-					(Duration.between(t.getTime(), LocalDateTime.now()).toMinutes() >= 1440 && t.getClosed() ? " - ARCHIVED" : "")));
+					(Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() >= 1440 && t.getClosed() ? " - ARCHIVED" : "")));
 			System.out.print(t.getDescription());
 			System.out.println();
 		});
