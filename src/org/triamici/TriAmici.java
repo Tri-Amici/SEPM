@@ -25,6 +25,8 @@ public class TriAmici {
 	static final short longField = 35;
 	static final short mediumField = 15;
 	static final char lineChar = '-';
+	private static int numResolved;
+	private static int numUnresolved;
 	
 	/**
 	 * Main application method
@@ -184,7 +186,7 @@ public class TriAmici {
 								);
 						break;
 					case "7": // Display Report
-						displayTickets(
+						displayReport(
 								storage.getTickets()
 								.stream()
 								);	
@@ -483,19 +485,29 @@ public class TriAmici {
 	
 	
 	
-	private static void DisplayReport(Stream<Ticket> stream) {
+	private static void displayReport(Stream<Ticket> stream) {
 		
 		
-		//TODO: Display the count of resolved and unresolved tickets.
+		
+		stream.forEach(t -> {
+			
+			if(t.getResolved())
+				numResolved++;
+			else
+				numUnresolved++;
 		
 		
+	
+		
+		});
+		
+		System.out.println("Resolved Tickets: " + numResolved +
+				" Unresolved Tickets: " + numUnresolved);
 		
 		
 		
 	}
-	
-	
-	
+		
 	private static String repeat(char lineChar, int number) {
 		StringBuilder bld = new StringBuilder();
 		
@@ -504,4 +516,6 @@ public class TriAmici {
 		
 		return bld.toString();
 	}
+	
+	
 }
