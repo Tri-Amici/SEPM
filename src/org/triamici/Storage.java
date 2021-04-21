@@ -102,7 +102,7 @@ public class Storage {
 			while (currLine != null && currLine.trim().length() > 0) { // A bit of input validation
 				tempInput = currLine.split(","); // Split line into array elements
 				this.addTicket(new Ticket(Integer.parseInt(tempInput[0]), tempInput[1], tempInput[2], 
-						tempInput[3], Short.parseShort(tempInput[4]), Short.parseShort(tempInput[5]),
+						tempInput[3], Short.parseShort(tempInput[4]), Boolean.parseBoolean(tempInput[5]),
 						Boolean.parseBoolean(tempInput[6]), LocalDateTime.parse(tempInput[7].trim())));
 				currLine = inFile.readLine();
 			}
@@ -148,7 +148,7 @@ public class Storage {
 			for (Ticket ticket: this.tickets)
 				outFile.write(ticket.getId() + "," + ticket.getCreator() + "," 
 						+ ticket.getDescription() + "," + ticket.getAssignee() + "," 
-						+ ticket.getSeverity() + "," + ticket.getStatus() + "," 
+						+ ticket.getSeverity() + "," + ticket.getClosed() + "," 
 						+ ticket.getResolved() + "," + ticket.getTime() 
 						+ System.getProperty("line.separator"));
 			outFile.flush();
