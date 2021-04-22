@@ -518,20 +518,26 @@ public class TriAmici {
 		System.out.println(repeat(lineChar, longField));
 		System.out.print(String.format("%-" +  mediumField + "s", "Creator"));
 		System.out.print(String.format("%-" +  mediumField + "s", "Asignee"));
-		System.out.println(String.format("%-" +  mediumField + "s", "Time Created"));
+		System.out.print(String.format("%-" +  mediumField + "s", "Time Created"));
+		System.out.print(String.format("%-" +  mediumField + "s", "Completed"));
+		System.out.print(String.format("%-" +  mediumField + "s", "Severity"));
+		System.out.println(String.format("%-" +  mediumField + "s", "Time Taken"));
+		
 		
 		
 		
 		
 		System.out.print(repeat(lineChar, mediumField -1) + " ");
-		System.out.println(repeat(lineChar, mediumField -1) + " ");
+		System.out.print(repeat(lineChar, mediumField -1) + " ");
+		System.out.print(repeat(lineChar, mediumField -1) + " ");
+		System.out.print(repeat(lineChar, mediumField -1) + " ");
+		System.out.print(repeat(lineChar, mediumField -1) + " ");
 		System.out.println(repeat(lineChar, mediumField -1) + " ");
 		
 		stream.forEach(t -> {
 			
 			if(t.getResolved() && t.getTime().toLocalDate().isAfter(startDate) &&
 					 t.getTime().toLocalDate().isBefore(endDate) ) {
-				System.out.println("The ticket is: " + t.getId());
 				numResolved++;
 			}
 			else if(t.getTime().toLocalDate().isAfter(startDate) &&
