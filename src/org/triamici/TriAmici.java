@@ -489,6 +489,12 @@ public class TriAmici {
 		
 		//Enter date range for report.
 		
+		//Print the report heading TODO: Add proper dates
+		System.out.println(String.format("%-" + shortField + "s", 
+				"Showing Ticket Report for Dates: " + LocalDateTime.MIN + " to " +
+				LocalDateTime.now() ));
+		System.out.println(repeat(lineChar, longField));
+		
 		stream.forEach(t -> {
 			
 			if(t.getResolved())
@@ -496,14 +502,12 @@ public class TriAmici {
 			else
 				numUnresolved++;
 			
-			/* TODO: System.out(String.format())
-			 * Display resolved and unresolved tickets apart
+			/* Display resolved and unresolved tickets apart
 			 * or together?
 			 */
 		});
 		
-		System.out.println("Displaying ticket report for dates: 01/01/1970 - "+
-		LocalDateTime.now());
+		
 		System.out.println("Resolved Tickets: " + numResolved +
 				" Unresolved Tickets: " + numUnresolved);
 		
