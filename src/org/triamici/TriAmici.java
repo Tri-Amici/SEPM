@@ -49,21 +49,24 @@ public class TriAmici {
 		}
 		
 		// Display the user login/signup menu
-		userMenu();
-		
-		// Display the ticket menu
-		ticketMenu();
+		if (!userMenu())
+			// Display the ticket menu
+			ticketMenu();
 		
 		// Close user input
 		userInput.close();
 	}
 	
-	private static void userMenu() throws IOException {
+	private static boolean userMenu() throws IOException {
+		// Exit app boolean
+		boolean exitApp = false;
+		
 		// Generate the log in menu
 		Menu menu = new Menu();
 		menu.addItem(new MenuItem(1, "Log in", (short)0));
 		menu.addItem(new MenuItem(2, "Register as new user", (short)0));
 		menu.addItem(new MenuItem(3, "Retrieve password", (short)0));
+		menu.addItem(new MenuItem(0, "Exit the app", (short)0));
 		
 		String menuText = menu.buildMenu((short)0);
 		
@@ -71,7 +74,7 @@ public class TriAmici {
 		String selection = "";
 		
 		// Loop until we get valid input
-		while (selection.length() == 0) {
+		while (selection.length() == 0 || !exitApp) {
 			// Display the menu
 			System.out.println(menuText);
 			
@@ -79,6 +82,9 @@ public class TriAmici {
 			selection = userInput.nextLine();
 			
 			switch (selection) {
+				case "0": // Exit program
+					exitApp = true;
+					break;
 				case "1":
 					loggedInUser = logInUser();
 					break;
@@ -109,6 +115,8 @@ public class TriAmici {
 					selection = "";
 			}
 		}
+		
+		return exitApp;
 	}
 	
 	private static void ticketMenu() throws IOException {
@@ -256,7 +264,7 @@ public class TriAmici {
 		if (ticketToUpdate.isPresent()) {
 			ticketToUpdate.get().setClosed(status.equals("0"));
 			ticketToUpdate.get().setResolved(resolved.equals("1"));
-			ticketToUpdate.get().setCloseTime(status.equals("0") ?  LocalDateTime.now() : LocalDateTime.of(1970, 1, 1, 0, 0));
+			ticketToUpdate.get().setCloseTime(status.equals("0") ?  LocalDateTime.now() : LocalDateTime.MIN);
 			storage.saveTicketData();
 		}
 	}
@@ -342,7 +350,7 @@ public class TriAmici {
 					false,
 					false,
 					LocalDateTime.now(),
-					LocalDateTime.of(1970, 1, 1, 0, 0)
+					LocalDateTime.MIN
 					)
 				);
 		
