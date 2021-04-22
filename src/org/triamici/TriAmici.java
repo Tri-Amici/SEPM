@@ -487,7 +487,7 @@ public class TriAmici {
 	
 	private static void displayReport(Stream<Ticket> stream) {
 		
-		
+		//Enter date range for report.
 		
 		stream.forEach(t -> {
 			
@@ -502,6 +502,8 @@ public class TriAmici {
 			 */
 		});
 		
+		System.out.println("Displaying ticket report for dates: 01/01/1970 - "+
+		LocalDateTime.now());
 		System.out.println("Resolved Tickets: " + numResolved +
 				" Unresolved Tickets: " + numUnresolved);
 		
