@@ -103,7 +103,7 @@ public class Storage {
 				tempInput = currLine.split(","); // Split line into array elements
 				this.addTicket(new Ticket(Integer.parseInt(tempInput[0]), tempInput[1], tempInput[2], 
 						tempInput[3], Short.parseShort(tempInput[4]), Boolean.parseBoolean(tempInput[5]),
-						Boolean.parseBoolean(tempInput[6]), LocalDateTime.parse(tempInput[7].trim())));
+						Boolean.parseBoolean(tempInput[6]), LocalDateTime.parse(tempInput[7].trim()), LocalDateTime.parse(tempInput[8].trim())));
 				currLine = inFile.readLine();
 			}
 		}
@@ -149,7 +149,8 @@ public class Storage {
 				outFile.write(ticket.getId() + "," + ticket.getCreator() + "," 
 						+ ticket.getDescription() + "," + ticket.getAssignee() + "," 
 						+ ticket.getSeverity() + "," + ticket.getClosed() + "," 
-						+ ticket.getResolved() + "," + ticket.getTime() 
+						+ ticket.getResolved() + "," + ticket.getOpenedTime() + ","
+						+ ticket.getClosedTime() 
 						+ System.getProperty("line.separator"));
 			outFile.flush();
 		} catch (Exception e) {
