@@ -516,6 +516,16 @@ public class TriAmici {
 				"Showing Ticket Report for Dates: " + startDate.toString() 
 				+ " to " + endDate ));
 		System.out.println(repeat(lineChar, longField));
+		System.out.print(String.format("%-" +  mediumField + "s", "Creator"));
+		System.out.print(String.format("%-" +  mediumField + "s", "Asignee"));
+		System.out.println(String.format("%-" +  mediumField + "s", "Time Created"));
+		
+		
+		
+		
+		System.out.print(repeat(lineChar, mediumField -1) + " ");
+		System.out.println(repeat(lineChar, mediumField -1) + " ");
+		System.out.println(repeat(lineChar, mediumField -1) + " ");
 		
 		stream.forEach(t -> {
 			
@@ -526,9 +536,13 @@ public class TriAmici {
 			}
 			else if(t.getTime().toLocalDate().isAfter(startDate) &&
 					 t.getTime().toLocalDate().isBefore(endDate) ) {
-				System.out.println("The ticket is: " + t.getId());
+				System.out.print(t.getCreator());
+				System.out.print(t.getTime());
+				System.out.println(t.getSeverity() );
 				numUnresolved++;
 			}
+			
+			System.out.println();
 		});
 		
 		/* Display resolved and unresolved tickets apart
