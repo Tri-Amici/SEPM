@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -30,6 +29,8 @@ public class TriAmici {
 	static final char lineChar = '-';
 	private static int numResolved;
 	private static int numUnresolved;
+	private static LocalDate startDate = null;
+	private static LocalDate endDate = null;
 	
 	/**
 	 * Main application method
@@ -490,28 +491,26 @@ public class TriAmici {
 	
 	private static void displayReport(Stream<Ticket> stream) {
 		
-		 LocalDate startDate = null;
-		 LocalDate endDate = null;
-		 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm");
-		
+		 
 		//Enter date range for report.
 		while(startDate == null || endDate == null ) {
 			 System.out.println("Enter the start date for the range in the "
 					+ "format: YYYY/MM/DD");
-			//TODO: Validate for valid input
+			 
 			 try {	
 			 startDate = LocalDate.parse(userInput.nextLine());
 			 System.out.println("Enter the end date for the range");
-			 endDate = LocalDate.parse(userInput.nextLine());
+			 endDate = LocalDate.parse(userInput.nextLine().trim());
 			 }
 			 catch(DateTimeParseException e) {
+				 
+				 //System.out.println(e);
 				 
 				 System.out.println("Error! Please enter the dates in format:" +
 				 " YYYY/MM/DD");
 			 }
 		 }
 			
-		
 		//Print the report heading
 		System.out.println(String.format("%-" + shortField + "s", 
 				"Showing Ticket Report for Dates: " + startDate.toString() 
@@ -520,15 +519,21 @@ public class TriAmici {
 		
 		stream.forEach(t -> {
 			
-			if(t.getResolved())//TODO: Add date range validation
+			if(t.getResolved() && t.getTime().toLocalDate().isAfter(startDate) &&
+					 t.getTime().toLocalDate().isBefore(endDate) ) {
+				System.out.println("The ticket is: " + t.getId());
 				numResolved++;
-			else
+			}
+			else if(t.getTime().toLocalDate().isAfter(startDate) &&
+					 t.getTime().toLocalDate().isBefore(endDate) ) {
+				System.out.println("The ticket is: " + t.getId());
 				numUnresolved++;
-			
-			/* Display resolved and unresolved tickets apart
-			 * or together?
-			 */
+			}
 		});
+		
+		/* Display resolved and unresolved tickets apart
+		 * or together?
+		 */
 		
 		
 		System.out.println("Resolved Tickets: " + numResolved +
