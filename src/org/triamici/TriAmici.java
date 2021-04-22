@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -489,21 +490,29 @@ public class TriAmici {
 	
 	private static void displayReport(Stream<Ticket> stream) {
 		
-		 LocalDate startDate;
-		 LocalDate endDate;
+		 LocalDate startDate = null;
+		 LocalDate endDate = null;
 		 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm");
 		
 		//Enter date range for report.
-		System.out.println("Enter the start date for the range in the "
-				+ "format: YYYY/MM/DD");
-		//TODO: Validate for valid input
-		startDate = LocalDate.parse(userInput.nextLine());
-		System.out.println("Enter the end date for the range");
-		endDate = LocalDate.parse(userInput.nextLine());
+		while(startDate == null || endDate == null ) {
+			 System.out.println("Enter the start date for the range in the "
+					+ "format: YYYY/MM/DD");
+			//TODO: Validate for valid input
+			 try {	
+			 startDate = LocalDate.parse(userInput.nextLine());
+			 System.out.println("Enter the end date for the range");
+			 endDate = LocalDate.parse(userInput.nextLine());
+			 }
+			 catch(DateTimeParseException e) {
+				 
+				 System.out.println("Error! Please enter the dates in format:" +
+				 " YYYY/MM/DD");
+			 }
+		 }
+			
 		
-		
-		
-		//Print the report heading TODO: Add proper dates
+		//Print the report heading
 		System.out.println(String.format("%-" + shortField + "s", 
 				"Showing Ticket Report for Dates: " + startDate.toString() 
 				+ " to " + endDate ));
@@ -511,7 +520,7 @@ public class TriAmici {
 		
 		stream.forEach(t -> {
 			
-			if(t.getResolved())
+			if(t.getResolved())//TODO: Add date range validation
 				numResolved++;
 			else
 				numUnresolved++;
