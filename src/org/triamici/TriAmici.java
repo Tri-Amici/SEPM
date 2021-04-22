@@ -6,7 +6,9 @@ package org.triamici;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -487,12 +489,24 @@ public class TriAmici {
 	
 	private static void displayReport(Stream<Ticket> stream) {
 		
+		 LocalDate startDate;
+		 LocalDate endDate;
+		 DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm");
+		
 		//Enter date range for report.
+		System.out.println("Enter the start date for the range in the "
+				+ "format: YYYY/MM/DD");
+		//TODO: Validate for valid input
+		startDate = LocalDate.parse(userInput.nextLine());
+		System.out.println("Enter the end date for the range");
+		endDate = LocalDate.parse(userInput.nextLine());
+		
+		
 		
 		//Print the report heading TODO: Add proper dates
 		System.out.println(String.format("%-" + shortField + "s", 
-				"Showing Ticket Report for Dates: " + LocalDateTime.MIN + " to " +
-				LocalDateTime.now() ));
+				"Showing Ticket Report for Dates: " + startDate.toString() 
+				+ " to " + endDate ));
 		System.out.println(repeat(lineChar, longField));
 		
 		stream.forEach(t -> {
