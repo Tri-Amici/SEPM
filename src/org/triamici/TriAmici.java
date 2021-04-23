@@ -34,6 +34,7 @@ public class TriAmici {
 	private static int numUnresolved;
 	private static LocalDate startDate = null;
 	private static LocalDate endDate = null;
+	private static Duration timeTaken = null;
 	
 	/**
 	 * Main application method
@@ -633,6 +634,7 @@ private static void displayReport(Stream<Ticket> stream) {
 		
 		
 		
+		
 		//Enter date range for report.
 		while(startDate == null || endDate == null ) {
 			 System.out.println("Enter the start date for the range in the "
@@ -645,7 +647,6 @@ private static void displayReport(Stream<Ticket> stream) {
 			 }
 			 catch(DateTimeParseException e) {
 				 
-				 //System.out.println(e);
 				 
 				 System.out.println("Error! Please enter the dates in format:" +
 				 " YYYY/MM/DD");
@@ -659,7 +660,7 @@ private static void displayReport(Stream<Ticket> stream) {
 		System.out.println(repeat(lineChar, longField));
 		System.out.print(String.format("%-" +  mediumField + "s", "Creator"));
 		System.out.print(String.format("%-" +  mediumLongField + "s", "Assignee"));
-		System.out.print(String.format("%-" + (mediumField+5) + "s", "Time Created"));
+		System.out.print(String.format("%-" + mediumLongField + "s", "Time Created"));
 		System.out.print(String.format("%-" +  shortField + "s", "Completed"));
 		System.out.print(String.format("%-" +  shortField + "s", "Severity"));
 		System.out.println(String.format("%-" +  mediumField + "s", "Time Taken"));
@@ -698,7 +699,8 @@ private static void displayReport(Stream<Ticket> stream) {
 				System.out.print(String.format("%-" + shortField + "s",  t.getResolved()));
 				System.out.print(String.format("%-" + shortField + "s", 
 						(new String[] {"Low", "Medium", "High"}) [t.getSeverity()] ));
-				System.out.println(Duration.between(t.getOpenedTime(), t.getClosedTime()));
+				timeTaken = Duration.between(t.getOpenedTime(), t.getClosedTime());
+				System.out.println(formatDuration(timeTaken));
 				
 						
 			
@@ -734,5 +736,20 @@ private static void displayReport(Stream<Ticket> stream) {
 			bld.append(lineChar);
 		
 		return bld.toString();
+	}
+	
+	private static String formatDuration(Duration duration) {
+		
+		
+		long seconds = duration.getSeconds();
+		long absSeconds = Math.abs(seconds);
+		String positive = String.format(
+				"%dD%dH:%02dM:%02dS",
+				1,
+				absSeconds / 3600,
+				(absSeconds % 3600) / 60 ,
+				absSeconds % 60);
+		return seconds < 0 ? "-" + positive : positive;
+		
 	}
 }
