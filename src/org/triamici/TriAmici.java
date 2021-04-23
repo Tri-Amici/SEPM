@@ -4,6 +4,7 @@
  */
 package org.triamici;
 
+
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -17,7 +18,6 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public class TriAmici {
 
@@ -47,18 +47,15 @@ public class TriAmici {
 		
 		// Check if we're running in Eclipse
 		for(int i = 0; i < args.length; i++)
-			if (args[i].contains("-runInEclipse"))
+			if (args[0].contains("-runInEclipse"))
 				runInEclipse = true;
-			else if (args[i].contains("-runInCI")) {
+			else if (args[0].contains("-runInCI")) {
 				System.out.println("CI: running smoke test and quitting...");	
 				runningInCI = true;
 			}
 		
 		// Create a new instance of the Storage class
-		
-		
 		storage = new Storage(runInEclipse);
-		
 		
 		// Quit if we're running in CI
 		if (runningInCI) {
@@ -178,27 +175,51 @@ public class TriAmici {
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(t -> t.getCreator().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
+								.filter(t -> t.getCreator().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getClosed())
+								.collect(Collectors.toList())
 								);
 						break;
 					case "3": // View Assigned Open Tickets
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(t -> t.getAssignee().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
+								.filter(t -> t.getAssignee().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getClosed())
+								.collect(Collectors.toList())
 								);
 						break;
 					case "4": // Change Ticket Severity
-						System.out.println(NOT_DONE);
+						// Get the open tickets
+						List<Ticket> openTickets1 = storage.getTickets()
+									.stream()
+									.filter(t -> !t.getClosed())
+									.collect(Collectors.toList());
+						
+						// Display the open tickets
+						displayTickets(openTickets1);
+						
+						// Prompt for the severity
+						changeSeverity(openTickets1);
+
 						break;
 					case "5": // Change Ticket Status
-						System.out.println(NOT_DONE);
+						// Get the open tickets
+						List<Ticket> openTickets2 = storage.getTickets()
+									.stream()
+									.filter(t -> !t.getClosed() || t.getClosed() && Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() < 1440)
+									.collect(Collectors.toList());
+						
+						// Display the open tickets
+						displayTickets(openTickets2);
+						
+						// Prompt for status
+						changeStatus(openTickets2);
 						break;
 					case "6": // View All Closed & Archived Tickets
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(Ticket::getResolved)
+								.filter(Ticket::getClosed)
+								.collect(Collectors.toList())
 								);
 						break;
 					case "7": // Display Report
@@ -558,8 +579,8 @@ public class TriAmici {
 		}
 	}
 	
-	private static void displayTickets(Stream<Ticket> stream) {
-		
+	private static void displayTickets(List<Ticket> tickets) {
+	
 		// Display the headers
 		System.out.print(String.format("%-" + shortField + "s", "ID"));
 		System.out.print(String.format("%-" + longField + "s", "Creator"));
@@ -580,7 +601,7 @@ public class TriAmici {
 		System.out.println();
 		
 		// Loop through the tickets
-		stream.forEach(t -> {
+		tickets.forEach(t -> {
 			// Retrieve the creator
 			Optional<User> creator = storage.getUsers()
 					.stream()
@@ -608,10 +629,8 @@ public class TriAmici {
 	}
 	
 	
-	
-	private static void displayReport(Stream<Ticket> stream) {
+private static void displayReport(Stream<Ticket> stream) {
 		
-		 
 		
 		
 		//Enter date range for report.
@@ -707,7 +726,7 @@ public class TriAmici {
 		endDate = null;
 			
 	}
-		
+	
 	private static String repeat(char lineChar, int number) {
 		StringBuilder bld = new StringBuilder();
 		
@@ -716,6 +735,4 @@ public class TriAmici {
 		
 		return bld.toString();
 	}
-	
-	
 }
