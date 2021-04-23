@@ -518,8 +518,8 @@ public class TriAmici {
 				+ " to " + endDate ));
 		System.out.println(repeat(lineChar, longField));
 		System.out.print(String.format("%-" +  mediumField + "s", "Creator"));
-		System.out.print(String.format("%-" +  mediumField + "s", "Asignee"));
-		System.out.print(String.format("%-" +  longField + "s", "Time Created"));
+		System.out.print(String.format("%-" +  (mediumField+5) + "s", "Asignee"));
+		System.out.print(String.format("%-" + (mediumField+5) + "s", "Time Created"));
 		System.out.print(String.format("%-" +  shortField + "s", "Completed"));
 		System.out.print(String.format("%-" +  shortField + "s", "Severity"));
 		System.out.println(String.format("%-" +  mediumField + "s", "Time Taken"));
@@ -529,8 +529,8 @@ public class TriAmici {
 		
 		
 		System.out.print(repeat(lineChar, mediumField -1) + " ");
-		System.out.print(repeat(lineChar, mediumField -1) + " ");
-		System.out.print(repeat(lineChar, mediumField -1) + " ");
+		System.out.print(repeat(lineChar, mediumField +4) + " ");
+		System.out.print(repeat(lineChar, mediumField +4) + " ");
 		System.out.print(repeat(lineChar, shortField -1) + " ");
 		System.out.print(repeat(lineChar, shortField -1) + " ");
 		System.out.println(repeat(lineChar, mediumField -1) + " ");
@@ -542,7 +542,6 @@ public class TriAmici {
 					.stream()
 					.filter(u -> u.getEmail().equalsIgnoreCase(t.getCreator()))
 					.findFirst();
-			
 			
 			//Retrieve the assignee
 			
@@ -557,10 +556,12 @@ public class TriAmici {
 			if(t.getResolved() && t.getTime().toLocalDate().isAfter(startDate) &&
 					 t.getTime().toLocalDate().isBefore(endDate) ) {
 				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
-				System.out.print(String.format("%-" + mediumField + "s", assignee.get().getName() ));
-				System.out.print(String.format("%-" + longField + "s", t.getTime().truncatedTo(ChronoUnit.HOURS) ));
+				System.out.print(String.format("%-" + (mediumField+5) + "s", assignee.get().getName() ));
+				System.out.print(String.format("%-" + (mediumField+5) + "s", t.getTime().truncatedTo(ChronoUnit.HOURS) ));
 				System.out.print(String.format("%-" + shortField + "s", "Yes" ));
-				System.out.print(String.format("%-" + shortField + "s", t.getSeverity() ));
+				System.out.print(String.format("%-" + shortField + "s", 
+						(new String[] {"Low", "Medium", "High"}) [t.getSeverity()] ));
+				//TODO: Time taken
 				System.out.println(String.format("%-" + mediumField + "s", "Time Taken" ));
 				numResolved++;
 			}
@@ -569,11 +570,12 @@ public class TriAmici {
 					 t.getTime().toLocalDate().isBefore(endDate) ) {
 				
 				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
-				System.out.print(String.format("%-" + mediumField + "s", assignee.get().getName() ));
-				System.out.print(String.format("%-" + longField + "s", t.getTime().truncatedTo(ChronoUnit.HOURS) ));
+				System.out.print(String.format("%-" + (mediumField+5) + "s", assignee.get().getName() ));
+				System.out.print(String.format("%-" + (mediumField+5) + "s", t.getTime().truncatedTo(ChronoUnit.HOURS) ));
 				System.out.print(String.format("%-" + shortField + "s", "No" ));
-				System.out.print(String.format("%-" + shortField + "s", t.getSeverity() ));
-				System.out.println(String.format("%-" + mediumField + "s", "Not yet complete" ));
+				System.out.print(String.format("%-" + shortField + "s", 
+						(new String[] {"Low", "Meduim", "High"}) [t.getSeverity()] ));
+				System.out.println(String.format("%-" + mediumField + "s", "Not complete" ));
 				numUnresolved++;
 			}
 			
@@ -587,9 +589,7 @@ public class TriAmici {
 		
 		System.out.println("Resolved Tickets: " + numResolved +
 				" Unresolved Tickets: " + numUnresolved);
-		
-		
-		
+			
 	}
 		
 	private static String repeat(char lineChar, int number) {
