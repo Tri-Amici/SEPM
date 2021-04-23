@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -529,7 +530,7 @@ public class TriAmici {
 		
 		System.out.print(repeat(lineChar, mediumField -1) + " ");
 		System.out.print(repeat(lineChar, mediumField -1) + " ");
-		System.out.print(repeat(lineChar, longField -1) + " ");
+		System.out.print(repeat(lineChar, mediumField -1) + " ");
 		System.out.print(repeat(lineChar, shortField -1) + " ");
 		System.out.print(repeat(lineChar, shortField -1) + " ");
 		System.out.println(repeat(lineChar, mediumField -1) + " ");
@@ -552,22 +553,27 @@ public class TriAmici {
 			
 			
 			
+			//Resolved tickets
 			if(t.getResolved() && t.getTime().toLocalDate().isAfter(startDate) &&
 					 t.getTime().toLocalDate().isBefore(endDate) ) {
 				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
 				System.out.print(String.format("%-" + mediumField + "s", assignee.get().getName() ));
-				//Time created
-				//Completed?
-				//Severity
+				System.out.print(String.format("%-" + longField + "s", t.getTime().truncatedTo(ChronoUnit.HOURS) ));
+				System.out.print(String.format("%-" + shortField + "s", "Yes" ));
+				System.out.print(String.format("%-" + shortField + "s", t.getSeverity() ));
 				System.out.println(String.format("%-" + mediumField + "s", "Time Taken" ));
 				numResolved++;
 			}
+			//Unresolved tickets
 			else if(t.getTime().toLocalDate().isAfter(startDate) &&
 					 t.getTime().toLocalDate().isBefore(endDate) ) {
 				
 				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
-				System.out.print(String.format("%-" + mediumField + "s", t.getTime() ));
-				System.out.println(String.format("%-" + shortField + "s", t.getSeverity() ));
+				System.out.print(String.format("%-" + mediumField + "s", assignee.get().getName() ));
+				System.out.print(String.format("%-" + longField + "s", t.getTime().truncatedTo(ChronoUnit.HOURS) ));
+				System.out.print(String.format("%-" + shortField + "s", "No" ));
+				System.out.print(String.format("%-" + shortField + "s", t.getSeverity() ));
+				System.out.println(String.format("%-" + mediumField + "s", "Not yet complete" ));
 				numUnresolved++;
 			}
 			
