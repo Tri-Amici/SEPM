@@ -741,10 +741,14 @@ private static void displayReport(Stream<Ticket> stream) {
 	private static String formatDuration(Duration duration) {
 		
 		
+		
 		long seconds = duration.getSeconds();
-		long absSeconds = Math.abs(seconds);
+		long absSeconds;
+		long daysElapsed = (seconds / 86400);
+		absSeconds = Math.abs(seconds % 86400);
 		String positive = String.format(
-				"%dH:%02dM",
+				"%dD:%dH:%02dM",
+				daysElapsed,
 				absSeconds / 3600,
 				(absSeconds % 3600) / 60);
 		return seconds < 0 ? "-" + positive : positive;
