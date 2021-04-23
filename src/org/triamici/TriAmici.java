@@ -744,11 +744,9 @@ private static void displayReport(Stream<Ticket> stream) {
 		long seconds = duration.getSeconds();
 		long absSeconds = Math.abs(seconds);
 		String positive = String.format(
-				"%dD%dH:%02dM:%02dS",
-				1,
+				"%dH:%02dM",
 				absSeconds / 3600,
-				(absSeconds % 3600) / 60 ,
-				absSeconds % 60);
+				(absSeconds % 3600) / 60);
 		return seconds < 0 ? "-" + positive : positive;
 		
 	}
