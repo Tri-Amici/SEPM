@@ -74,7 +74,7 @@ public class TriAmici {
 		String selection = "";
 		
 		// Loop until we get valid input
-		while (selection.length() == 0 || !exitApp) {
+		while (selection.length() == 0 && !exitApp) {
 			// Display the menu
 			System.out.println(menuText);
 			
@@ -113,6 +113,7 @@ public class TriAmici {
 					break;
 				default:
 					selection = "";
+					break;
 			}
 		}
 		
@@ -147,7 +148,7 @@ public class TriAmici {
 			selection = userInput.nextLine();
 			
 			// If we have a insecure option or we're a technician
-			if (selection.equals("1") || selection.equals("2") || loggedInUser.getLevel() > 0) {
+			if (Validation.validShortRange((short)0, (short)2, Short.parseShort(selection)) || loggedInUser.getLevel() > 0) {
 				switch (selection) {
 					case "0": // Exit program
 						exitApp = true;
