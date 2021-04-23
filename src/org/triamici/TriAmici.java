@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TriAmici {
 
@@ -167,27 +166,51 @@ public class TriAmici {
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(t -> t.getCreator().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
+								.filter(t -> t.getCreator().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getClosed())
+								.collect(Collectors.toList())
 								);
 						break;
 					case "3": // View Assigned Open Tickets
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(t -> t.getAssignee().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
+								.filter(t -> t.getAssignee().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getClosed())
+								.collect(Collectors.toList())
 								);
 						break;
 					case "4": // Change Ticket Severity
-						System.out.println(NOT_DONE);
+						// Get the open tickets
+						List<Ticket> openTickets1 = storage.getTickets()
+									.stream()
+									.filter(t -> !t.getClosed())
+									.collect(Collectors.toList());
+						
+						// Display the open tickets
+						displayTickets(openTickets1);
+						
+						// Prompt for the severity
+						changeSeverity(openTickets1);
+
 						break;
 					case "5": // Change Ticket Status
-						System.out.println(NOT_DONE);
+						// Get the open tickets
+						List<Ticket> openTickets2 = storage.getTickets()
+									.stream()
+									.filter(t -> !t.getClosed() || t.getClosed() && Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() < 1440)
+									.collect(Collectors.toList());
+						
+						// Display the open tickets
+						displayTickets(openTickets2);
+						
+						// Prompt for status
+						changeStatus(openTickets2);
 						break;
 					case "6": // View All Closed & Archived Tickets
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(Ticket::getResolved)
+								.filter(Ticket::getClosed)
+								.collect(Collectors.toList())
 								);
 						break;
 					case "7": // Display Report
@@ -200,6 +223,108 @@ public class TriAmici {
 						break;
 				}
 			}
+		}
+	}
+	
+	private static void changeStatus(List<Ticket> tickets) throws IOException {
+		String[] ticketID = new String[] {""};
+		String status = "";
+		String resolved = "";
+		
+		// Loop through until the ticket ID is not blank
+		while (ticketID[0].equals("")) {
+			// Prompt for the ticket ID
+			System.out.println("Please enter a ticket ID");
+			ticketID[0] = userInput.nextLine();
+			
+			// Check that it is a valid integer and that the ID exists in the tickets
+			if (!Validation.validInteger(ticketID[0]) || 
+					tickets.stream().filter(t -> t.getId() == Integer.parseInt(ticketID[0])).count() == 0) {
+				ticketID[0] = "";
+			}
+		}
+		
+		// Prompt for the ticket status from the user
+		while (status.equals("")) {
+			System.out.println("Enter a ticket status\n0 - Closed\n1 - Open");
+			status = userInput.nextLine().trim();
+			
+			if (!Validation.validInteger(status) ||
+					!Validation.validShortRange((short)0, (short)1, Short.parseShort(status))) {
+				status = "";
+			}
+		}
+		
+		// Prompt for the ticket resolution from the user
+		if (status.equals("0"))
+			while (resolved.equals("")) {
+				System.out.println("Was the issue resolved\n0 - Not resolved\n1 - Resolved");
+				resolved = userInput.nextLine().trim();
+				
+				if (!Validation.validInteger(resolved) ||
+						!Validation.validShortRange((short)0, (short)1, Short.parseShort(resolved))) {
+					resolved = "";
+				}
+			}
+		
+		// Grab the ticket
+		Optional<Ticket> ticketToUpdate = tickets
+				.stream()
+				.filter(t -> t.getId() == Integer.parseInt(ticketID[0]))
+				.findFirst();
+		
+		// Update the ticket
+		if (ticketToUpdate.isPresent()) {
+			ticketToUpdate.get().setClosed(status.equals("0"));
+			ticketToUpdate.get().setResolved(resolved.equals("1"));
+			ticketToUpdate.get().setCloseTime(status.equals("0") ?  LocalDateTime.now() : LocalDateTime.of(1970, 1, 1, 0, 0));
+			storage.saveTicketData();
+		}
+	}
+	
+	private static void changeSeverity(List<Ticket> tickets) throws IOException {
+		String[] ticketID = new String[] {""};
+		String severity = "";
+		String assignee = "";
+		
+		// Loop through until the ticket ID is not blank
+		while (ticketID[0].equals("")) {
+			// Prompt for the ticket ID
+			System.out.println("Please enter a ticket ID");
+			ticketID[0] = userInput.nextLine();
+			
+			// Check that it is a valid integer and that the ID exists in the tickets
+			if (!Validation.validInteger(ticketID[0]) || 
+					tickets.stream().filter(t -> t.getId() == Integer.parseInt(ticketID[0])).count() == 0) {
+				ticketID[0] = "";
+			}
+		}
+		
+		// Prompt for the ticket severity from the user
+		while (severity.equals("")) {
+			System.out.println("Enter a ticket severity\n0 - Low priority\n1 - Medium priority\n2 = High priority");
+			severity = userInput.nextLine().trim();
+			
+			if (!Validation.validInteger(severity) ||
+					!Validation.validShortRange((short)0, (short)2, Short.parseShort(severity))) {
+				severity = "";
+			}
+		}
+		
+		// Get the new assignee
+		assignee = getAssignee(Short.parseShort(severity));
+		
+		// Grab the ticket
+		Optional<Ticket> ticketToUpdate = tickets
+				.stream()
+				.filter(t -> t.getId() == Integer.parseInt(ticketID[0]))
+				.findFirst();
+		
+		// Update the ticket
+		if (ticketToUpdate.isPresent()) {
+			ticketToUpdate.get().setAssignee(assignee);
+			ticketToUpdate.get().setSeverity(Short.parseShort(severity));
+			storage.saveTicketData();
 		}
 	}
 	
@@ -225,9 +350,34 @@ public class TriAmici {
 			}
 		}
 		
+		String assignee = getAssignee(Short.parseShort(severity));
+		
+		// Add the ticket
+		storage.addTicket(
+				new Ticket(
+					0,
+					loggedInUser.getEmail(),
+					description,
+					assignee,
+					Short.parseShort(severity),
+					false,
+					false,
+					LocalDateTime.now(),
+					LocalDateTime.of(1970, 1, 1, 0, 0)
+					)
+				);
+		
+		// Save the data
+		storage.saveTicketData();
+		
+		// Success message
+		System.out.println("Ticket logged!");
+	}
+	
+	private static String getAssignee(short severity) {
 		// Get the ticket lists
 		LinkedList<TicketAssignment> ticketAssignments = new LinkedList<>();
-		final short neededTechnician = (short) (Short.parseShort(severity) != (short)2 ? 1 : 2);
+		final short neededTechnician = (short) (severity != 2 ? 1 : 2);
 		
 		// Get the technician email addresses
 		List<String> user = storage.getUsers()
@@ -244,7 +394,7 @@ public class TriAmici {
 						new TicketAssignment(u,
 								storage.getTickets()
 									.stream()
-									.filter(t -> t.getAssignee().equals(u))
+									.filter(t -> t.getAssignee().equals(u) && !t.getClosed())
 									.collect(Collectors.counting()))
 						)
 			);
@@ -253,34 +403,12 @@ public class TriAmici {
 		Optional<TicketAssignment> assignee = ticketAssignments
 				.stream()
 				.sorted(Comparator.comparing(TicketAssignment::getCount))
-				.findFirst();
+				.findAny();
 		
-		
-		// Log a new instance of a ticket
-		if (assignee.isPresent()) {
-			// Add the ticket
-			storage.addTicket(
-					new Ticket(
-						0,
-						loggedInUser.getEmail(),
-						description,
-						assignee.get().getAssignee(),
-						Short.parseShort(severity),
-						(short)0,
-						false,
-						LocalDateTime.now()
-						)
-					);
-			
-			// Save the data
-			storage.saveTicketData();
-			
-			// Success message
-			System.out.println("Ticket logged!");
-		} else {
-			// Failure message
-			System.out.println("No technicians in the system");
-		}
+		if (assignee.isPresent())
+			return assignee.get().getAssignee();
+		else
+			return "";
 	}
 	
  	private static User logInUser() {
@@ -446,15 +574,17 @@ public class TriAmici {
 		
 		// Display the headers
 		System.out.print(String.format("%-" + shortField + "s", "ID"));
-		System.out.print(String.format("%-" + mediumField + "s", "Creator"));
-		System.out.print(String.format("%-" + mediumField + "s", "Assignee"));
+		System.out.print(String.format("%-" + longField + "s", "Creator"));
+		System.out.print(String.format("%-" + longField + "s", "Assignee"));
 		System.out.print(String.format("%-" + mediumField + "s", "Severity"));
+		System.out.print(String.format("%-" + mediumField + "s", "Resolution"));
 		System.out.print(String.format("%-" + longField + "s", "Status"));
 		System.out.print(String.format("%-" + longField + "s", "Description"));
 		System.out.println();
 		
 		System.out.print(repeat(lineChar, shortField - 1) + " ");
-		System.out.print(repeat(lineChar, mediumField - 1) + " ");
+		System.out.print(repeat(lineChar, longField - 1) + " ");
+		System.out.print(repeat(lineChar, longField - 1) + " ");
 		System.out.print(repeat(lineChar, mediumField - 1) + " ");
 		System.out.print(repeat(lineChar, mediumField - 1) + " ");
 		System.out.print(repeat(lineChar, longField - 1) + " ");
@@ -462,7 +592,7 @@ public class TriAmici {
 		System.out.println();
 		
 		// Loop through the tickets
-		stream.forEach(t -> {
+		tickets.forEach(t -> {
 			// Retrieve the creator
 			Optional<User> creator = storage.getUsers()
 					.stream()
@@ -477,12 +607,13 @@ public class TriAmici {
 			
 			// Display the ticket ID
 			System.out.print(String.format("%-" + shortField + "s", t.getId()));
-			System.out.print(String.format("%-" + mediumField + "s", creator.isPresent() ? creator.get().getName() : "NA"));
-			System.out.print(String.format("%-" + mediumField + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
+			System.out.print(String.format("%-" + longField + "s", creator.isPresent() ? creator.get().getName() : "NA"));
+			System.out.print(String.format("%-" + longField + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
 			System.out.print(String.format("%-" + mediumField + "s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
+			System.out.print(String.format("%-" + mediumField + "s", t.getResolved() ? "Resolved" : "Unresolved"));
 			System.out.print(String.format("%-" + longField + "s", 
-					(t.getResolved() ? "Closed" : "Open") + 
-					(Duration.between(t.getTime(), LocalDateTime.now()).toMinutes() > 1440 && t.getResolved() ? " - ARCHIVED" : "")));
+					(t.getClosed() ? "Closed" : "Open") + 
+					(Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() >= 1440 && t.getClosed() ? " - ARCHIVED" : "")));
 			System.out.print(t.getDescription());
 			System.out.println();
 		});
