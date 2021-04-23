@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 public class TriAmici {
 
@@ -175,51 +177,27 @@ public class TriAmici {
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(t -> t.getCreator().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getClosed())
-								.collect(Collectors.toList())
+								.filter(t -> t.getCreator().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
 								);
 						break;
 					case "3": // View Assigned Open Tickets
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(t -> t.getAssignee().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getClosed())
-								.collect(Collectors.toList())
+								.filter(t -> t.getAssignee().equalsIgnoreCase(loggedInUser.getEmail()) && !t.getResolved())
 								);
 						break;
 					case "4": // Change Ticket Severity
-						// Get the open tickets
-						List<Ticket> openTickets1 = storage.getTickets()
-									.stream()
-									.filter(t -> !t.getClosed())
-									.collect(Collectors.toList());
-						
-						// Display the open tickets
-						displayTickets(openTickets1);
-						
-						// Prompt for the severity
-						changeSeverity(openTickets1);
-
+						System.out.println(NOT_DONE);
 						break;
 					case "5": // Change Ticket Status
-						// Get the open tickets
-						List<Ticket> openTickets2 = storage.getTickets()
-									.stream()
-									.filter(t -> !t.getClosed() || t.getClosed() && Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() < 1440)
-									.collect(Collectors.toList());
-						
-						// Display the open tickets
-						displayTickets(openTickets2);
-						
-						// Prompt for status
-						changeStatus(openTickets2);
+						System.out.println(NOT_DONE);
 						break;
 					case "6": // View All Closed & Archived Tickets
 						displayTickets(
 								storage.getTickets()
 								.stream()
-								.filter(Ticket::getClosed)
-								.collect(Collectors.toList())
+								.filter(Ticket::getResolved)
 								);
 						break;
 					case "7": // Display Report
@@ -601,7 +579,7 @@ public class TriAmici {
 		System.out.println();
 		
 		// Loop through the tickets
-		tickets.forEach(t -> {
+		stream.forEach(t -> {
 			// Retrieve the creator
 			Optional<User> creator = storage.getUsers()
 					.stream()
@@ -693,11 +671,11 @@ public class TriAmici {
 			
 			
 			//Resolved tickets
-			if(t.getResolved() && t.getTime().toLocalDate().isAfter(startDate) &&
-					 t.getTime().toLocalDate().isBefore(endDate) ) {
+			if(t.getResolved() && t.getOpenedTime().toLocalDate().isAfter(startDate) &&
+					 t.getOpenedTime().toLocalDate().isBefore(endDate) ) {
 				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
 				System.out.print(String.format("%-" + (mediumField+5) + "s", assignee.get().getName() ));
-				System.out.print(String.format("%-" + (mediumField+5) + "s", t.getTime().truncatedTo(ChronoUnit.HOURS) ));
+				System.out.print(String.format("%-" + (mediumField+5) + "s", t.getOpenedTime().truncatedTo(ChronoUnit.HOURS) ));
 				System.out.print(String.format("%-" + shortField + "s", "Yes" ));
 				System.out.print(String.format("%-" + shortField + "s", 
 						(new String[] {"Low", "Medium", "High"}) [t.getSeverity()] ));
@@ -706,12 +684,12 @@ public class TriAmici {
 				numResolved++;
 			}
 			//Unresolved tickets
-			else if(t.getTime().toLocalDate().isAfter(startDate) &&
-					 t.getTime().toLocalDate().isBefore(endDate) ) {
+			else if(t.getOpenedTime().toLocalDate().isAfter(startDate) &&
+					 t.getOpenedTime().toLocalDate().isBefore(endDate) ) {
 				
 				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
 				System.out.print(String.format("%-" + (mediumField+5) + "s", assignee.get().getName() ));
-				System.out.print(String.format("%-" + (mediumField+5) + "s", t.getTime().truncatedTo(ChronoUnit.HOURS) ));
+				System.out.print(String.format("%-" + (mediumField+5) + "s", t.getOpenedTime().truncatedTo(ChronoUnit.HOURS) ));
 				System.out.print(String.format("%-" + shortField + "s", "No" ));
 				System.out.print(String.format("%-" + shortField + "s", 
 						(new String[] {"Low", "Meduim", "High"}) [t.getSeverity()] ));
