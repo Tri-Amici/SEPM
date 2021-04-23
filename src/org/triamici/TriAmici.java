@@ -28,6 +28,7 @@ public class TriAmici {
 	static final short shortField = 10;
 	static final short longField = 35;
 	static final short mediumField = 15;
+	static final short mediumLongField = 20;
 	static final char lineChar = '-';
 	private static int numResolved;
 	private static int numUnresolved;
@@ -611,6 +612,8 @@ public class TriAmici {
 	private static void displayReport(Stream<Ticket> stream) {
 		
 		 
+		
+		
 		//Enter date range for report.
 		while(startDate == null || endDate == null ) {
 			 System.out.println("Enter the start date for the range in the "
@@ -636,19 +639,16 @@ public class TriAmici {
 				+ " to " + endDate ));
 		System.out.println(repeat(lineChar, longField));
 		System.out.print(String.format("%-" +  mediumField + "s", "Creator"));
-		System.out.print(String.format("%-" +  (mediumField+5) + "s", "Asignee"));
+		System.out.print(String.format("%-" +  mediumLongField + "s", "Assignee"));
 		System.out.print(String.format("%-" + (mediumField+5) + "s", "Time Created"));
 		System.out.print(String.format("%-" +  shortField + "s", "Completed"));
 		System.out.print(String.format("%-" +  shortField + "s", "Severity"));
 		System.out.println(String.format("%-" +  mediumField + "s", "Time Taken"));
 		
 		
-		
-		
-		
 		System.out.print(repeat(lineChar, mediumField -1) + " ");
-		System.out.print(repeat(lineChar, mediumField +4) + " ");
-		System.out.print(repeat(lineChar, mediumField +4) + " ");
+		System.out.print(repeat(lineChar, mediumLongField -1) + " ");
+		System.out.print(repeat(lineChar, mediumLongField -1) + " ");
 		System.out.print(repeat(lineChar, shortField -1) + " ");
 		System.out.print(repeat(lineChar, shortField -1) + " ");
 		System.out.println(repeat(lineChar, mediumField -1) + " ");
@@ -671,42 +671,38 @@ public class TriAmici {
 			
 			
 			//Resolved tickets
-			if(t.getResolved() && t.getOpenedTime().toLocalDate().isAfter(startDate) &&
+			if( t.getOpenedTime().toLocalDate().isAfter(startDate) &&
 					 t.getOpenedTime().toLocalDate().isBefore(endDate) ) {
 				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
-				System.out.print(String.format("%-" + (mediumField+5) + "s", assignee.get().getName() ));
-				System.out.print(String.format("%-" + (mediumField+5) + "s", t.getOpenedTime().truncatedTo(ChronoUnit.HOURS) ));
-				System.out.print(String.format("%-" + shortField + "s", "Yes" ));
+				System.out.print(String.format("%-" + (mediumLongField) + "s", assignee.get().getName() ));
+				System.out.print(String.format("%-" + (mediumLongField) + "s", t.getOpenedTime().truncatedTo(ChronoUnit.HOURS) ));
+				System.out.print(String.format("%-" + shortField + "s",  t.getResolved()));
 				System.out.print(String.format("%-" + shortField + "s", 
 						(new String[] {"Low", "Medium", "High"}) [t.getSeverity()] ));
 				//TODO: Time taken
 				System.out.println(String.format("%-" + mediumField + "s", "Time Taken" ));
-				numResolved++;
-			}
-			//Unresolved tickets
-			else if(t.getOpenedTime().toLocalDate().isAfter(startDate) &&
-					 t.getOpenedTime().toLocalDate().isBefore(endDate) ) {
+				System.out.println();
 				
-				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
-				System.out.print(String.format("%-" + (mediumField+5) + "s", assignee.get().getName() ));
-				System.out.print(String.format("%-" + (mediumField+5) + "s", t.getOpenedTime().truncatedTo(ChronoUnit.HOURS) ));
-				System.out.print(String.format("%-" + shortField + "s", "No" ));
-				System.out.print(String.format("%-" + shortField + "s", 
-						(new String[] {"Low", "Meduim", "High"}) [t.getSeverity()] ));
-				System.out.println(String.format("%-" + mediumField + "s", "Not complete" ));
-				numUnresolved++;
+				if(t.getResolved())
+					numResolved++;
+				else
+					numUnresolved++;
 			}
 			
-			System.out.println();
+			
 		});
-		
+		System.out.println();
 		/* Display resolved and unresolved tickets apart
 		 * or together?
 		 */
-		
+		if(numResolved == 0 && numUnresolved == 0) 
+			System.out.println("No tickets to show for the given date range.");
 		
 		System.out.println("Resolved Tickets: " + numResolved +
 				" Unresolved Tickets: " + numUnresolved);
+		
+		startDate = null;
+		endDate = null;
 			
 	}
 		
