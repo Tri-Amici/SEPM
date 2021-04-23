@@ -518,9 +518,9 @@ public class TriAmici {
 		System.out.println(repeat(lineChar, longField));
 		System.out.print(String.format("%-" +  mediumField + "s", "Creator"));
 		System.out.print(String.format("%-" +  mediumField + "s", "Asignee"));
-		System.out.print(String.format("%-" +  mediumField + "s", "Time Created"));
-		System.out.print(String.format("%-" +  mediumField + "s", "Completed"));
-		System.out.print(String.format("%-" +  mediumField + "s", "Severity"));
+		System.out.print(String.format("%-" +  longField + "s", "Time Created"));
+		System.out.print(String.format("%-" +  shortField + "s", "Completed"));
+		System.out.print(String.format("%-" +  shortField + "s", "Severity"));
 		System.out.println(String.format("%-" +  mediumField + "s", "Time Taken"));
 		
 		
@@ -529,22 +529,45 @@ public class TriAmici {
 		
 		System.out.print(repeat(lineChar, mediumField -1) + " ");
 		System.out.print(repeat(lineChar, mediumField -1) + " ");
-		System.out.print(repeat(lineChar, mediumField -1) + " ");
-		System.out.print(repeat(lineChar, mediumField -1) + " ");
-		System.out.print(repeat(lineChar, mediumField -1) + " ");
+		System.out.print(repeat(lineChar, longField -1) + " ");
+		System.out.print(repeat(lineChar, shortField -1) + " ");
+		System.out.print(repeat(lineChar, shortField -1) + " ");
 		System.out.println(repeat(lineChar, mediumField -1) + " ");
 		
 		stream.forEach(t -> {
 			
+			//Retrieve the creator
+			Optional <User>creator = storage.getUsers()
+					.stream()
+					.filter(u -> u.getEmail().equalsIgnoreCase(t.getCreator()))
+					.findFirst();
+			
+			
+			//Retrieve the assignee
+			
+			Optional <User>assignee = storage.getUsers()
+					.stream()
+					.filter(u -> u.getEmail().equalsIgnoreCase(t.getAssignee()))
+					.findFirst();
+			
+			
+			
 			if(t.getResolved() && t.getTime().toLocalDate().isAfter(startDate) &&
 					 t.getTime().toLocalDate().isBefore(endDate) ) {
+				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
+				System.out.print(String.format("%-" + mediumField + "s", assignee.get().getName() ));
+				//Time created
+				//Completed?
+				//Severity
+				System.out.println(String.format("%-" + mediumField + "s", "Time Taken" ));
 				numResolved++;
 			}
 			else if(t.getTime().toLocalDate().isAfter(startDate) &&
 					 t.getTime().toLocalDate().isBefore(endDate) ) {
-				System.out.print(t.getCreator());
-				System.out.print(t.getTime());
-				System.out.println(t.getSeverity() );
+				
+				System.out.print(String.format("%-" + mediumField + "s", creator.get().getName() ));
+				System.out.print(String.format("%-" + mediumField + "s", t.getTime() ));
+				System.out.println(String.format("%-" + shortField + "s", t.getSeverity() ));
 				numUnresolved++;
 			}
 			
