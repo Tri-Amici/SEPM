@@ -34,7 +34,6 @@ public class TriAmici {
 	private static int numUnresolved;
 	private static LocalDate startDate = null;
 	private static LocalDate endDate = null;
-	private static Duration timeTaken = null;
 	
 	/**
 	 * Main application method
@@ -680,11 +679,8 @@ public class TriAmici {
 				System.out.print(String.format("%-" + shortField + "s",  t.getResolved()));
 				System.out.print(String.format("%-" + shortField + "s", 
 						(new String[] {"Low", "Medium", "High"}) [t.getSeverity()] ));
-				//TODO: Time taken
-				//System.out.println(String.format("%-" + mediumField + "s", "Time Taken" ));
-				//timeTaken = Duration.between(t.getOpenedTime(), t.getClosedTime());
-				timeTaken = Duration.between(t.getOpenedTime(), t.getClosedTime());
-				System.out.println(timeTaken.toHours());
+				System.out.println(Duration.between(t.getOpenedTime(), t.getClosedTime()));
+				
 						
 			
 				System.out.println();
