@@ -746,12 +746,10 @@ private static void displayReport(Stream<Ticket> stream) {
 		long absSeconds;
 		long daysElapsed = (seconds / 86400);
 		absSeconds = Math.abs(seconds % 86400);
-		String positive = String.format(
+		return String.format(
 				"%dD:%dH:%02dM",
 				daysElapsed,
 				absSeconds / 3600,
 				(absSeconds % 3600) / 60);
-		return seconds < 0 ? "-" + positive : positive;
-		
 	}
 }
