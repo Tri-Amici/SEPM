@@ -106,8 +106,11 @@ tickets. For example:
     8         Matt Kellock        Niall Horan         Medium         Unresolved     Open           Equipment Malfunction
 
 
-Option 3. This option is only available to and will only appear for technicians. 
-This option will result in the technician user being presented with a list of the
+NOTE: The following options will only appear for technicians. 
+
+
+Option 3. View Assigned Open Tickets - This option will result in the 
+technician user being presented with a list of the
 open tickets that have been assigned to them, if there are any. For example:
 
     ID        Creator             Assignee            Severity       Resolution     Status         Description                        
@@ -115,4 +118,31 @@ open tickets that have been assigned to them, if there are any. For example:
     11        Liam Chisari        Zayn Malik          High           Unresolved     Open           Description of issue
 
 
+Option 4. Change Ticket Severity - This option allows the user to change the 
+severity of an open and unresolved ticket. Changing the severity of the issue
+may result in the system automatically reassigning the ticket to a technician
+of the appropriate level. For example:
 
+    ID        Creator             Assignee            Severity       Resolution     Status         Description                        
+    --------- ------------------- ------------------- -------------- -------------- -------------- ----------------------------------
+    4         Matt Kellock        Zayn Malik          High           Unresolved     Open           My thing is broken too
+    8         Matt Kellock        Louis Tomlinson     High           Unresolved     Open           Equipment malfunction
+    Please enter a ticket ID
+    4
+    Enter a ticket severity
+    0 - Low priority
+    1 - Medium priority
+    2 - High priority
+    0
+
+
+Now that the severity of the ticket has been changed to low, the assigned technician has also
+been changed to a level 1 technician from a level 2 technician.
+
+ID        Creator             Assignee            Severity       Resolution     Status         Description                        
+--------- ------------------- ------------------- -------------- -------------- -------------- ----------------------------------
+4         Matt Kellock        Harry Styles        Low            Unresolved     Open           My thing is broken too
+8         Matt Kellock        Louis Tomlinson     High           Unresolved     Open           Equipment malfunction
+
+
+Option 5. - Change Ticket Status

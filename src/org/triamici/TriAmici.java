@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -313,7 +312,7 @@ public class TriAmici {
 		
 		// Prompt for the ticket severity from the user
 		while (severity.equals("")) {
-			System.out.println("Enter a ticket severity\n0 - Low priority\n1 - Medium priority\n2 = High priority");
+			System.out.println("Enter a ticket severity\n0 - Low priority\n1 - Medium priority\n2 - High priority");
 			severity = userInput.nextLine().trim();
 			
 			if (!Validation.validInteger(severity) ||
@@ -585,20 +584,20 @@ public class TriAmici {
 	
 		// Display the headers
 		System.out.print(String.format("%-" + SHORT_FIELD + "s", "ID"));
-		System.out.print(String.format("%-" + LONG_FIELD + "s", "Creator"));
-		System.out.print(String.format("%-" + LONG_FIELD + "s", "Assignee"));
+		System.out.print(String.format("%-" + MEDIUM_LONG_FIELD + "s", "Creator"));
+		System.out.print(String.format("%-" + MEDIUM_LONG_FIELD + "s", "Assignee"));
 		System.out.print(String.format("%-" + MEDIUM_FIELD + "s", "Severity"));
 		System.out.print(String.format("%-" + MEDIUM_FIELD + "s", "Resolution"));
-		System.out.print(String.format("%-" + LONG_FIELD + "s", "Status"));
+		System.out.print(String.format("%-" + MEDIUM_FIELD + "s", "Status"));
 		System.out.print(String.format("%-" + LONG_FIELD + "s", "Description"));
 		System.out.println();
 		
 		System.out.print(repeat(LINE_CHAR, SHORT_FIELD - 1) + " ");
-		System.out.print(repeat(LINE_CHAR, LONG_FIELD - 1) + " ");
-		System.out.print(repeat(LINE_CHAR, LONG_FIELD - 1) + " ");
+		System.out.print(repeat(LINE_CHAR, MEDIUM_LONG_FIELD - 1) + " ");
+		System.out.print(repeat(LINE_CHAR, MEDIUM_LONG_FIELD - 1) + " ");
 		System.out.print(repeat(LINE_CHAR, MEDIUM_FIELD - 1) + " ");
 		System.out.print(repeat(LINE_CHAR, MEDIUM_FIELD - 1) + " ");
-		System.out.print(repeat(LINE_CHAR, LONG_FIELD - 1) + " ");
+		System.out.print(repeat(LINE_CHAR, MEDIUM_FIELD - 1) + " ");
 		System.out.print(repeat(LINE_CHAR, LONG_FIELD - 1));
 		System.out.println();
 		
@@ -618,11 +617,11 @@ public class TriAmici {
 			
 			// Display the ticket ID
 			System.out.print(String.format("%-" + SHORT_FIELD + "s", t.getId()));
-			System.out.print(String.format("%-" + LONG_FIELD + "s", creator.isPresent() ? creator.get().getName() : "NA"));
-			System.out.print(String.format("%-" + LONG_FIELD + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
+			System.out.print(String.format("%-" + MEDIUM_LONG_FIELD + "s", creator.isPresent() ? creator.get().getName() : "NA"));
+			System.out.print(String.format("%-" + MEDIUM_LONG_FIELD + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
 			System.out.print(String.format("%-" + MEDIUM_FIELD + "s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
 			System.out.print(String.format("%-" + MEDIUM_FIELD + "s", t.getResolved() ? "Resolved" : "Unresolved"));
-			System.out.print(String.format("%-" + LONG_FIELD + "s", 
+			System.out.print(String.format("%-" + MEDIUM_FIELD + "s", 
 					(t.getClosed() ? "Closed" : "Open") + 
 					(Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() >= 1440 && t.getClosed() ? " - ARCHIVED" : "")));
 			System.out.print(t.getDescription());
