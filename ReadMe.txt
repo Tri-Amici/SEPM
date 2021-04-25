@@ -213,6 +213,6 @@ within the provided date range. For example:
     Total Tickets: 11 - Resolved Tickets: 4 - Unresolved Tickets: 7
 
 
-To produce a uniform report that meets our standards for appearance and readibility,
-we have decied to show the severity for both resolved & unresolved tickets. 
+To produce a uniform report that meets our standards for appearance and readability,
+we have decided to show the severity for both resolved & unresolved tickets. 
 The requirements of the client have been met.
