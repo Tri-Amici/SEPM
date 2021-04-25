@@ -110,6 +110,7 @@ public class TriAmici {
 					break;
 				case "3":
 					retrievePassword();
+					loggedInUser = logInUser();
 					break;
 				default:
 					selection = "";
