@@ -28,7 +28,7 @@ public class TriAmici {
 	static final short SHORT_FIELD = 10;
 	static final short LONG_FIELD = 35;
 	static final short MEDIUM_FIELD = 15;
-	static final short MEDIUM_LONG_FIELD = 20;
+	static final short MEDIUM_LONG_FIELD = 25;
 	static final char LINE_CHAR = '-';
 	private static int numResolved;
 	private static int numUnresolved;
@@ -588,7 +588,7 @@ public class TriAmici {
 		System.out.print(String.format("%-" + MEDIUM_LONG_FIELD + "s", "Assignee"));
 		System.out.print(String.format("%-" + MEDIUM_FIELD + "s", "Severity"));
 		System.out.print(String.format("%-" + MEDIUM_FIELD + "s", "Resolution"));
-		System.out.print(String.format("%-" + MEDIUM_FIELD + "s", "Status"));
+		System.out.print(String.format("%-" + MEDIUM_LONG_FIELD + "s", "Status"));
 		System.out.print(String.format("%-" + LONG_FIELD + "s", "Description"));
 		System.out.println();
 		
@@ -597,7 +597,7 @@ public class TriAmici {
 		System.out.print(repeat(LINE_CHAR, MEDIUM_LONG_FIELD - 1) + " ");
 		System.out.print(repeat(LINE_CHAR, MEDIUM_FIELD - 1) + " ");
 		System.out.print(repeat(LINE_CHAR, MEDIUM_FIELD - 1) + " ");
-		System.out.print(repeat(LINE_CHAR, MEDIUM_FIELD - 1) + " ");
+		System.out.print(repeat(LINE_CHAR, MEDIUM_LONG_FIELD - 1) + " ");
 		System.out.print(repeat(LINE_CHAR, LONG_FIELD - 1));
 		System.out.println();
 		
@@ -621,7 +621,7 @@ public class TriAmici {
 			System.out.print(String.format("%-" + MEDIUM_LONG_FIELD + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
 			System.out.print(String.format("%-" + MEDIUM_FIELD + "s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
 			System.out.print(String.format("%-" + MEDIUM_FIELD + "s", t.getResolved() ? "Resolved" : "Unresolved"));
-			System.out.print(String.format("%-" + MEDIUM_FIELD + "s", 
+			System.out.print(String.format("%-" + MEDIUM_LONG_FIELD + "s", 
 					(t.getClosed() ? "Closed" : "Open") + 
 					(Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() >= 1440 && t.getClosed() ? " - ARCHIVED" : "")));
 			System.out.print(t.getDescription());

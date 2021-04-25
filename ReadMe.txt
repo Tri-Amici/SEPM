@@ -141,8 +141,48 @@ been changed to a level 1 technician from a level 2 technician.
 
 ID        Creator             Assignee            Severity       Resolution     Status         Description                        
 --------- ------------------- ------------------- -------------- -------------- -------------- ----------------------------------
-4         Matt Kellock        Harry Styles        Low            Unresolved     Open           My thing is broken too
+4         Matt Kellock        Niall Horan         Low            Unresolved     Open           My thing is broken too
 8         Matt Kellock        Louis Tomlinson     High           Unresolved     Open           Equipment malfunction
 
 
-Option 5. - Change Ticket Status
+Option 5. Change Ticket Status - This option allows the user to change the status
+of the ticket from open to closed and to mark it as resolved if it is being changed
+to closed. For example:
+
+    ID        Creator             Assignee            Severity       Resolution     Status         Description                        
+    --------- ------------------- ------------------- -------------- -------------- -------------- ----------------------------------
+    4         Matt Kellock        Niall Horan         Low            Unresolved     Open           My thing is broken too
+    8         Matt Kellock        Louis Tomlinson     High           Unresolved     Open           Equipment malfunction
+    Please enter a ticket ID
+    4
+    Enter a ticket status
+    0 - Closed
+    1 - Open
+    0
+    Was the issue resolved
+    0 - Not resolved
+    1 - Resolved
+    1
+
+The changes can be seen here: 
+
+    ID        Creator             Assignee            Severity       Resolution     Status         Description                        
+    --------- ------------------- ------------------- -------------- -------------- -------------- ----------------------------------
+    4         Matt Kellock        Niall Horan         Low            Resolved       Closed         My thing is broken too
+    8         Matt Kellock        Louis Tomlinson     High           Unresolved     Open           Equipment malfunction
+
+
+Option 6. View All Closed & Archived Tickets - This option allows the user to
+view the details of all closed and archived tickets. For example:
+
+ID     Creator               Assignee              Severity    Resolution  Status                Description
+------ --------------------- --------------------- ----------- ----------- --------------------- -------------------------------
+1      Matt Kellock          Harry Styles          Medium      Unresolved  Closed - ARCHIVED     My thing is broken
+2      Matt Kellock          Harry Styles          Low         Unresolved  Closed - ARCHIVED     My thing is broken too
+3      Matt Kellock          Harry Styles          Medium      Unresolved  Closed - ARCHIVED     My thing is broken
+5      Matt Kellock          Niall Horan           Medium      Resolved    Closed - ARCHIVED     My thing is broken
+6      Matt Kellock          Liam Payne            Medium      Resolved    Closed - ARCHIVED     My thing is broken too
+7      Matt Kellock          Liam Payne            Low         Unresolved  Closed - ARCHIVED     Desc
+9      Matt Kellock          Liam Payne            Low         Unresolved  Closed - ARCHIVED     Blah
+10     Matt Kellock          Louis Tomlinson       High        Resolved    Closed - ARCHIVED     sdfgd
+11     Zayn Malik            Zayn Malik            High        Resolved    Closed - ARCHIVED     Description of issue
