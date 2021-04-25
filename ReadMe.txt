@@ -186,3 +186,33 @@ ID     Creator               Assignee              Severity    Resolution  Statu
 9      Matt Kellock          Liam Payne            Low         Unresolved  Closed - ARCHIVED     Blah
 10     Matt Kellock          Louis Tomlinson       High        Resolved    Closed - ARCHIVED     sdfgd
 11     Zayn Malik            Zayn Malik            High        Resolved    Closed - ARCHIVED     Description of issue
+
+Option 7. Display Report - This option generates a report containing the details of all tickets
+within the provided date range. For example:
+
+    Enter the start date for the range in the format: YYYY-MM-DD
+    2021-01-01
+    Enter the end date for the range
+    2022-01-01
+    Showing Ticket Report for Dates: 2021-01-01 to 2022-01-01
+    -----------------------------------
+    Creator        Assignee                 Time Created             Resolved  Severity  Time Taken     
+    -------------- ------------------------ ------------------------ --------- --------- -------------- 
+    Matt Kellock   Harry Styles             14/04/2021 09:26 PM      No        Medium    
+    Matt Kellock   Harry Styles             14/04/2021 09:26 PM      No        Low       
+    Matt Kellock   Harry Styles             14/04/2021 09:26 PM      No        Medium    
+    Matt Kellock   Niall Horan              14/04/2021 09:26 PM      No        Low       
+    Matt Kellock   Niall Horan              14/04/2021 09:26 PM      Yes       Medium    7D:0H:00M
+    Matt Kellock   Liam Payne               14/04/2021 09:26 PM      Yes       Medium    7D:0H:00M
+    Matt Kellock   Liam Payne               15/04/2021 04:48 PM      No        Low       
+    Matt Kellock   Louis Tomlinson          15/04/2021 04:49 PM      No        High      
+    Matt Kellock   Liam Payne               20/04/2021 01:34 PM      No        Low       
+    Matt Kellock   Louis Tomlinson          20/04/2021 01:40 PM      Yes       High      1D:16H:50M
+    Zayn Malik     Zayn Malik               21/04/2021 06:30 AM      Yes       High      1D:0H:34M
+
+    Total Tickets: 11 - Resolved Tickets: 4 - Unresolved Tickets: 7
+
+
+To produce a uniform report that meets our standards for appearance and readibility,
+we have decied to show the severity for both resolved & unresolved tickets. 
+The requirements of the client have been met.
