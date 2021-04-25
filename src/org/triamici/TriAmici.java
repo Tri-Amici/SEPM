@@ -312,7 +312,7 @@ public class TriAmici {
 		
 		// Prompt for the ticket severity from the user
 		while (severity.equals("")) {
-			System.out.println("Enter a ticket severity\n0 - Low priority\n1 - Medium priority\n2 - High priority");
+			System.out.println("Enter a ticket severity\n0 - Low priority\n1 - Medium priority\n2 = High priority");
 			severity = userInput.nextLine().trim();
 			
 			if (!Validation.validInteger(severity) ||
@@ -584,20 +584,20 @@ public class TriAmici {
 	
 		// Display the headers
 		System.out.print(String.format("%-" + shortField + "s", "ID"));
-		System.out.print(String.format("%-" + mediumLongField + "s", "Creator"));
-		System.out.print(String.format("%-" + mediumLongField + "s", "Assignee"));
+		System.out.print(String.format("%-" + longField + "s", "Creator"));
+		System.out.print(String.format("%-" + longField + "s", "Assignee"));
 		System.out.print(String.format("%-" + mediumField + "s", "Severity"));
 		System.out.print(String.format("%-" + mediumField + "s", "Resolution"));
-		System.out.print(String.format("%-" + mediumField + "s", "Status"));
+		System.out.print(String.format("%-" + longField + "s", "Status"));
 		System.out.print(String.format("%-" + longField + "s", "Description"));
 		System.out.println();
 		
 		System.out.print(repeat(lineChar, shortField - 1) + " ");
-		System.out.print(repeat(lineChar, mediumLongField - 1) + " ");
-		System.out.print(repeat(lineChar, mediumLongField - 1) + " ");
+		System.out.print(repeat(lineChar, longField - 1) + " ");
+		System.out.print(repeat(lineChar, longField - 1) + " ");
 		System.out.print(repeat(lineChar, mediumField - 1) + " ");
 		System.out.print(repeat(lineChar, mediumField - 1) + " ");
-		System.out.print(repeat(lineChar, mediumField - 1) + " ");
+		System.out.print(repeat(lineChar, longField - 1) + " ");
 		System.out.print(repeat(lineChar, longField - 1));
 		System.out.println();
 		
@@ -617,11 +617,11 @@ public class TriAmici {
 			
 			// Display the ticket ID
 			System.out.print(String.format("%-" + shortField + "s", t.getId()));
-			System.out.print(String.format("%-" + mediumLongField + "s", creator.isPresent() ? creator.get().getName() : "NA"));
-			System.out.print(String.format("%-" + mediumLongField + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
+			System.out.print(String.format("%-" + longField + "s", creator.isPresent() ? creator.get().getName() : "NA"));
+			System.out.print(String.format("%-" + longField + "s", assignee.isPresent() ? assignee.get().getName() : "NA"));
 			System.out.print(String.format("%-" + mediumField + "s", (new String[] {"Low", "Medium", "High"})[t.getSeverity()]));
 			System.out.print(String.format("%-" + mediumField + "s", t.getResolved() ? "Resolved" : "Unresolved"));
-			System.out.print(String.format("%-" + mediumField + "s", 
+			System.out.print(String.format("%-" + longField + "s", 
 					(t.getClosed() ? "Closed" : "Open") + 
 					(Duration.between(t.getClosedTime(), LocalDateTime.now()).toMinutes() >= 1440 && t.getClosed() ? " - ARCHIVED" : "")));
 			System.out.print(t.getDescription());
